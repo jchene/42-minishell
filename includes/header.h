@@ -97,17 +97,11 @@ typedef struct s_exec
 	int					*infiles;
 	int					*outfiles;
 	int					*to_close;
+	int					input;
+	int					output;
 	char				*path;
 	char				**args;
 }						t_exec;
-
-typedef struct s_child
-{
-	int		input;
-	int		output;
-	char	*path;
-	char	**args;
-}			t_child;
 
 typedef struct s_data
 {

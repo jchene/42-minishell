@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/18 15:40:09 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/18 16:38:47 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ int	fill_e_struc(t_exec *struc, char **envp)
 	return (1);
 }*/
 
-int	child_process(int input, int output, char **envp)
+int	child_process(t_exec *struc, char **envp)
 {
 	int	i;
 
-	fprintf(stderr, "%s[%d]inf: %d ouf: %d%s\n", GREEN_CODE, getpid(), input, output, RESET_CODE);
-	dup2(input, STDIN_FILENO);
-	dup2(output, STDOUT_FILENO);
+	fprintf(stderr, "%s[%d]inf: %d ouf: %d%s\n", GREEN_CODE, getpid(), struc->input, struc->output, RESET_CODE);
+	dup2(struc->input, STDIN_FILENO);
+	dup2(struc->output, STDOUT_FILENO);
 	fprintf(stderr, "%s[%d]Executing %s%s\n", GREEN_CODE, getpid(), struc->args[0], RESET_CODE);
 	if (execve(struc->path, struc->args, envp) < 0)
 		perror("msh: execvel");
@@ -90,7 +90,7 @@ int	pipe_at_end(t_parsing *cursor)
 	return (0);
 }
 
-void	switch_pipe(void)
+int	switch_pipe(void)
 {
 	if ((data())->old_pipe[P_RD] != -1)
 		close((data())->old_pipe[P_RD]);
@@ -100,6 +100,10 @@ void	switch_pipe(void)
 		close((data())->old_pipe[P_WR]);
 	if ((data())->new_pipe[P_WR] != -1)
 		(data())->old_pipe[P_WR] = (data())->new_pipe[P_WR];
+	if (pipe_at_end((data())->p_index))
+		if (pipe((data())->new_pipe) < 0)
+			return (0);
+	return (1);
 }
 
 int	start_exec(char **envp)
@@ -117,10 +121,8 @@ int	start_exec(char **envp)
 	{
 		if (!init_exec())
 			return (0);
-		switch_pipe();
-		if (pipe_at_end((data())->p_index))
-			if (pipe((data())->new_pipe) < 0)
-				return (0);
+		if (!switch_pipe())
+			return (0);
 		if (!fill_e_struc((data())->exec_struc, envp))
 			return (0);
 		(data())->child_ids[i] = fork();
@@ -130,7 +132,6 @@ int	start_exec(char **envp)
 			if (child_process((data())->exec_struc, envp) < 0)
 				return (0);
 		fprintf(stderr, "%sChild[%d] %d born%s\n", YELLOW_CODE, i, (data())->child_ids[i], RESET_CODE);
-		close_exec((data())->exec_struc);
 		free_exec(1);
 	}
 	return (free_exec(1));
