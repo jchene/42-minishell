@@ -132,6 +132,7 @@ typedef struct s_data
 	int			old_pipe[2];
 	int			new_pipe[2];
 	int			skip_exec;
+	int			last_skip;
 }				t_data;
 
 //				CORE
@@ -170,7 +171,7 @@ int				flag_words(void);
 int				first_init(void);
 int				fd_update(int *fd_ptr, int value);
 int				nb_cmds(int reset);
-void			wait_all(void);
+int				wait_all(void);
 int				init_exec(void);
 int				pipe_at_end(t_parsing *cursor);
 int				new_pipe(void);

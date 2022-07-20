@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/20 17:11:21 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/21 00:06:53 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,24 @@ int	nb_cmds(int flag)
 }
 
 //Wait for all childs to terminate
-void	wait_all(void)
+int	wait_all(void)
 {
 	int	i;
 
 	i = -1;
-	fprintf(stderr, "%sWaiting for all%s\n", YELLOW_CODE, RESET_CODE);
+	//fprintf(stderr, "%sWaiting for all%s\n", YELLOW_CODE, RESET_CODE);
 	while (++i < nb_cmds(NO_UP))
 	{
-		fprintf(stderr, "%sWaiting for [%d]: %d%s\n", YELLOW_CODE, i, (data())->child_ids[i], RESET_CODE);
-		waitpid((data())->child_ids[i], NULL, 0);
-		fprintf(stderr, "%sChild[%d] done%s\n", YELLOW_CODE, (data())->child_ids[i], RESET_CODE);
+		if ((data())->child_ids[i] != -1)
+		{
+			//fprintf(stderr, "%sWaiting for [%d]: %d%s\n", YELLOW_CODE, i, (data())->child_ids[i], RESET_CODE);
+			if (waitpid((data())->child_ids[i], NULL, 0) < 0)
+				return (iperror("minishell: waitpid", 0));
+			//fprintf(stderr, "%sChild[%d] done%s\n", YELLOW_CODE, (data())->child_ids[i], RESET_CODE);
+		}
 	}
-	fprintf(stderr, "%sAll childs done.%s\n", YELLOW_CODE, RESET_CODE);
+	//fprintf(stderr, "%sAll childs done.%s\n", YELLOW_CODE, RESET_CODE);
+	return (1);
 }
 
 //Returns 1 if a pipe is present at then end of block cursor, 0 otherwise
@@ -69,7 +74,7 @@ int	fd_update(int *fd_ptr, int value)
 {
 	if (*fd_ptr >= 0)
 		if (close(*fd_ptr) < 0)
-			return (iperror("minishell: close", 0));
+			return (iperror("minishell: close3", 0));
 	*fd_ptr = value;
 	return (1);
 }

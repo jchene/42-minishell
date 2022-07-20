@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 15:55:29 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/20 17:12:38 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/21 00:06:53 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,12 @@ void	display_all_heredocs(void)
 	tmp = (data())->he_start;
 	while (tmp)
 	{
-		fprintf(stderr, "heredoc[%d]:\n", i);
+		//fprintf(stderr, "heredoc[%d]:\n", i);
 		j = 0;
 		tmp2 = tmp->heredoc;
 		while (tmp2)
 		{
-			fprintf(stderr, "line[%d]: %s\n", j, tmp2->line);
+			//fprintf(stderr, "line[%d]: %s\n", j, tmp2->line);
 			tmp2 = tmp2->next;
 			j++;
 		}

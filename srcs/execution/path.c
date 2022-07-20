@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:54:24 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/15 19:57:30 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/21 00:14:17 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 		free(path);
 	}
 	free_ptabn((void **)dirs);
-	printf("msh: command not found: %s\n", string);
+	printf("minishell: command not found: %s\n", string);
 	return ((void *)1);
 }
 
