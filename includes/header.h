@@ -38,6 +38,11 @@
 # define P_RD		0	//	READ END
 # define P_WR		1	//	WRITE END
 
+// UPDATE FUNCTIONS
+
+# define NO_UP		0	//	NO UPDATE
+# define UP			1	//	UPDATE
+
 // ASCII CODES
 
 # define D_QUOTE	34	//	DOUBLE QUOTE
@@ -94,11 +99,9 @@ typedef struct s_heredoc
 
 typedef struct s_exec
 {
-	int					*infiles;
-	int					*outfiles;
-	int					*to_close;
 	int					input;
 	int					output;
+	int					to_close[2];
 	char				*path;
 	char				**args;
 }						t_exec;
@@ -125,13 +128,10 @@ typedef struct s_data
 	t_export	*exp_start;
 	t_export	*exp_end;
 	t_exec		*exec_struc;
-	t_child		*child_struc;
 	t_heredoc	*he_start;
-	int			nb_inf;
-	int			nb_ouf;
-	int			nb_cls;
 	int			old_pipe[2];
 	int			new_pipe[2];
+	int			skip_exec;
 }				t_data;
 
 //				CORE
@@ -167,12 +167,14 @@ int				flag_words(void);
 
 //				EXECUTION
 
+int				first_init(void);
+int				fd_update(int *fd_ptr, int value);
 int				nb_cmds(int reset);
 void			wait_all(void);
 int				init_exec(void);
 int				pipe_at_end(t_parsing *cursor);
 int				new_pipe(void);
-int				init_close(t_parsing *cursor, t_exec *struc);
+int				init_close(t_exec *struc);
 int				fill_e_struc(t_exec *struc, char **envp);
 int				child_process(t_exec *struc, char **envp);
 int				start_exec(char **envp);

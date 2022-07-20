@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 15:55:29 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/15 18:59:49 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/20 17:12:38 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,6 @@ int	init_heredocs(void)
 	int			count;
 	t_heredoc	*heredoc;
 
-	(data())->old_pipe[0] = -1;
-	(data())->old_pipe[1] = -1;
-	(data())->new_pipe[0] = -1;
-	(data())->new_pipe[1] = -1;
-	(data())->child_ids = (int *)ft_calloc(sizeof(int) * nb_cmds(0));
-	if (!(data())->child_ids)
-		return (ifree((data())->exec_struc, 0));
 	i = -1;
 	count = count_list_flags(HRD);
 	while (++i < count)

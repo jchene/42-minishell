@@ -12,28 +12,6 @@
 
 #include "../../includes/header.h"
 
-int	free_exec(int ret)
-{
-	if ((data())->exec_struc)
-	{
-		free((data())->exec_struc->infiles);
-		(data())->exec_struc->infiles = NULL;
-		free((data())->exec_struc->outfiles);
-		(data())->exec_struc->outfiles = NULL;
-		free((data())->exec_struc->to_close);
-		(data())->exec_struc->to_close = NULL;
-		free((data())->exec_struc->path);
-		(data())->exec_struc->path = NULL;
-		free_ptabn((void **)(data())->exec_struc->args);
-		free((data())->exec_struc);
-		(data())->exec_struc = NULL;
-	}
-	(data())->nb_inf = 0;
-	(data())->nb_ouf = 0;
-	(data())->nb_cls = 0;
-	return (ret);
-}
-
 int	init_data(char **envp)
 {
 	data();

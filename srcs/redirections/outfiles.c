@@ -6,13 +6,13 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 16:16:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/15 19:44:25 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/20 17:09:58 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-void	fill_outpipe(t_exec *struc)
+/*void	fill_outpipe(t_exec *struc)
 {
 	struc->outfiles[(data())->nb_ouf] = (data())->new_pipe[P_WR];
 	(data())->nb_ouf++;
@@ -75,3 +75,4 @@ void	*get_outfiles(t_parsing *cursor, t_exec *struc)
 	}
 	return (struc);
 }
+*/
