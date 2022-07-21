@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/21 00:06:53 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/21 12:32:57 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	*get_infiles(t_parsing *cursor, t_exec *struc)
 	{
 		if (tmp->flag == INF)
 			if (!fill_infile(tmp, struc))
+				return (NULL);
+		if (tmp->flag == HRD)
+			if (!fill_heredoc(tmp, struc))
 				return (NULL);
 		if ((data())->skip_exec)
 			return (struc);
