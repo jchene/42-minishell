@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/21 00:06:53 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/25 14:23:34 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	pipe_at_end(t_parsing *cursor)
 	return (0);
 }
 
+//Closes fd at fd_ptr and puts value into ft_ptr
 int	fd_update(int *fd_ptr, int value)
 {
 	if (*fd_ptr >= 0)

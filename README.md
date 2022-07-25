@@ -3,6 +3,10 @@ TO DO LIST
 
 -- ANGUINAU
 
+• env -i
+	• Protéger pour empecher de segfault
+	• Créer nouvel env (pwd, [old pwd], shlvl)
+
 • Corriger les leaks
 
 -- JCHENE
