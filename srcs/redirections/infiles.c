@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/21 12:32:57 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/27 18:30:34 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,15 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 //Get a heredoc fd and put it in infiles
 int	fill_heredoc(t_parsing *cursor, t_exec *struc)
 {
+	t_heredoc	*tmp;
+	int			i;
+
 	(void)cursor;
 	(void)struc;
+	tmp = (data())->he_start;
+	i = -1;
+	while (++i < (data())->he_read)
+		tmp = tmp->next;
 	return (1);
 }
 
