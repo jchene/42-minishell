@@ -12,6 +12,18 @@
 
 #include "../../includes/header.h"
 
+int	cp_envp(char **envp)
+{
+	(data())->envp = cp_str_tab2(envp);
+	if (!(data())->envp)
+		return (0);
+	(data())->i = -1;
+	while ((data())->envp[++(data())->i])
+		continue ;
+	(data())->envp_size = (data())->i;
+	return (1);
+}
+
 int	init_data(char **envp)
 {
 	data();
@@ -21,21 +33,15 @@ int	init_data(char **envp)
 	(data())->line = NULL;
 	(data())->envp = NULL;
 	(data())->envp_size = 0;
-	if (envp)
-	{
-		(data())->envp = cp_str_tab2(envp);
-		if (!(data())->envp)
-			return (0);
-		(data())->i = -1;
-		while ((data())->envp[++(data())->i])
-			continue ;
-		(data())->envp_size = (data())->i;
-	}
 	(data())->h_start = NULL;
 	(data())->p_start = NULL;
 	(data())->exp_start = NULL;
 	(data())->exp_end = NULL;
 	(data())->he_start = NULL;
+	(data())->he_read = 0;
+	if (envp[0])
+		if (!cp_envp)
+			return (0);
 	return (1);
 }
 
@@ -61,16 +67,16 @@ int	new_prompt(void)
 		free((data())->child_ids);
 		(data())->child_ids = NULL;
 	}
-	if ((data())->exit_calls > 1)
-		(data())->exit_code = 0;
-	if ((data())->exit_calls == 1)
-		(data())->stop = 1;
-	(data())->exit_calls = 0;
 	if ((data())->he_start)
 	{
 		clear_all_heredocs((data())->he_start);
 		(data())->he_start = NULL;
 	}
+	if ((data())->exit_calls > 1)
+		(data())->exit_code = 0;
+	if ((data())->exit_calls == 1)
+		(data())->stop = 1;
+	(data())->exit_calls = 0;
 	return (1);
 }
 

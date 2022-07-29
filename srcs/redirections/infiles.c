@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/27 18:30:34 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/29 15:03:15 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,30 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 }
 
 //Get a heredoc fd and put it in infiles
-int	fill_heredoc(t_parsing *cursor, t_exec *struc)
+int	fill_heredoc(t_exec *struc)
 {
-	t_heredoc	*tmp;
+	t_heredoc	*htmp;
+	t_hrd_line	*ltmp;
 	int			i;
+	int			out;
 
-	(void)cursor;
 	(void)struc;
-	tmp = (data())->he_start;
+	if ((data())->he_pipe[P_RD] >= 0)
+		close((data())->he_pipe[P_RD]);
+	if ((data())->he_pipe[P_WR] >= 0)
+		close((data())->he_pipe[P_WR]);
+	if (pipe((data())->he_pipe) < 0)
+		return (iperror("minishell: pipe failed", 0));
+	htmp = (data())->he_start;
 	i = -1;
 	while (++i < (data())->he_read)
-		tmp = tmp->next;
+		htmp = htmp->next;
+	ltmp = htmp->heredoc;
+	while (ltmp)
+	{
+		write((data())->he_pipe[P_WR]);
+		ltmp = ltmp->next;
+	}
 	return (1);
 }
 
@@ -78,7 +91,7 @@ void	*get_infiles(t_parsing *cursor, t_exec *struc)
 			if (!fill_infile(tmp, struc))
 				return (NULL);
 		if (tmp->flag == HRD)
-			if (!fill_heredoc(tmp, struc))
+			if (!fill_heredoc(struc))
 				return (NULL);
 		if ((data())->skip_exec)
 			return (struc);

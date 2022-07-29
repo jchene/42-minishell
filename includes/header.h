@@ -129,6 +129,8 @@ typedef struct s_data
 	t_export	*exp_end;
 	t_exec		*exec_struc;
 	t_heredoc	*he_start;
+	int			he_read;
+	int			he_pipe[2];
 	int			old_pipe[2];
 	int			new_pipe[2];
 	int			skip_exec;
