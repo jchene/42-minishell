@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/21 00:27:36 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/29 18:48:32 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,8 @@ int	child_process(t_exec *struc, char **envp)
 	if (struc->output >= 0)
 		if (dup2(struc->output, STDOUT_FILENO) < 0)
 			return (iperror("minishell: dup2", 0));
-	if (struc->to_close[0] >= 0)
-		if (close(struc->to_close[0]) < 0)
-			return (iperror("minishell: close4", 0));
-	if (struc->to_close[1] >= 0)
-		if (close(struc->to_close[1]) < 0)
-			return (iperror("minishell: close5", 0));
-	//fprintf(stderr, "%s[%d]Executing %s%s\n", GREEN_CODE, getpid(), struc->args[0], RESET_CODE);
+	if (!reset_fd(struc->to_close[P_RD]) || !reset_fd(struc->to_close[P_WR]))
+		return (0);
 	if (!access(struc->path, F_OK))
 		if (execve(struc->path, struc->args, envp) < 0)
 			perror("minishell: execve");
@@ -37,19 +32,17 @@ int	child_process(t_exec *struc, char **envp)
 
 int	switch_pipe(void)
 {
-	if ((data())->old_pipe[P_RD] != -1)
-		if (close((data())->old_pipe[P_RD]) < 0)
-			return (iperror("minishell: close1", 0));
+	if (!fd_update((data())->old_pipe[P_RD], -1))
+		return (0);
 	if ((data())->new_pipe[P_RD] != -1)
 		(data())->old_pipe[P_RD] = (data())->new_pipe[P_RD];
-	if ((data())->old_pipe[P_WR] != -1)
-		if (close((data())->old_pipe[P_WR]))
-			return (iperror("minishell: close2", 0));
+	if (!fd_update((data())->old_pipe[P_WR], -1))
+		return (0);
 	if ((data())->new_pipe[P_WR] != -1)
 		(data())->old_pipe[P_WR] = (data())->new_pipe[P_WR];
 	if (pipe_at_end((data())->p_index))
 		if (pipe((data())->new_pipe) < 0)
-			return (iperror("minishell: pipe", 0));
+			return (iperror("minishell: pipe failed", 0));
 	return (1);
 }
 

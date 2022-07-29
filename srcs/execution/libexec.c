@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/25 14:23:34 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/29 19:00:54 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,10 @@ int	wait_all(void)
 	int	i;
 
 	i = -1;
-	//fprintf(stderr, "%sWaiting for all%s\n", YELLOW_CODE, RESET_CODE);
 	while (++i < nb_cmds(NO_UP))
-	{
 		if ((data())->child_ids[i] != -1)
-		{
-			//fprintf(stderr, "%sWaiting for [%d]: %d%s\n", YELLOW_CODE, i, (data())->child_ids[i], RESET_CODE);
 			if (waitpid((data())->child_ids[i], NULL, 0) < 0)
 				return (iperror("minishell: waitpid", 0));
-			//fprintf(stderr, "%sChild[%d] done%s\n", YELLOW_CODE, (data())->child_ids[i], RESET_CODE);
-		}
-	}
-	//fprintf(stderr, "%sAll childs done.%s\n", YELLOW_CODE, RESET_CODE);
 	return (1);
 }
 
@@ -70,12 +62,13 @@ int	pipe_at_end(t_parsing *cursor)
 	return (0);
 }
 
-//Closes fd at fd_ptr and puts value into ft_ptr
+//Closes securely fd at fd_ptr and puts value into ft_ptr
 int	fd_update(int *fd_ptr, int value)
 {
+	fprintf(stderr, "%sfd %d updated to %d%s\n", CYAN_CODE, *fd_ptr, value, RESET_CODE);
 	if (*fd_ptr >= 0)
 		if (close(*fd_ptr) < 0)
-			return (iperror("minishell: close3", 0));
+			return (iperror("minishell: close failed", 0));
 	*fd_ptr = value;
 	return (1);
 }

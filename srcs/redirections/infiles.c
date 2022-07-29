@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/29 15:03:15 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/29 18:57:14 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	*fill_inpipe(t_exec *struc)
 {
 	if (!fd_update(&struc->input, (data())->old_pipe[P_RD]))
 		return (NULL);
-	if (!fd_update(&struc->to_close[0], (data())->old_pipe[P_WR]))
+	if (!fd_update(&struc->to_close[P_WR], (data())->old_pipe[P_WR]))
 		return (NULL);
 	//fprintf(stderr, "%sFilled input-close with fd %d-%d%s\n", YELLOW_CODE, struc->input, struc->to_close[0], RESET_CODE);
 	return (struc);
@@ -40,7 +40,8 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 		return (iperror("minishell: infile open", 1));
 	}
 	//fprintf(stderr, "%sOpened %s on fd %d%s\n", YELLOW_CODE, cursor->next->str, redir, RESET_CODE);
-	if (!fd_update(&struc->input, redir))
+	if (!fd_update(&struc->input, redir) || !fd_update(&struc->to_close[P_WR],
+			-1))
 		return (0);
 	return (1);
 }
@@ -51,25 +52,27 @@ int	fill_heredoc(t_exec *struc)
 	t_heredoc	*htmp;
 	t_hrd_line	*ltmp;
 	int			i;
-	int			out;
 
-	(void)struc;
-	if ((data())->he_pipe[P_RD] >= 0)
-		close((data())->he_pipe[P_RD]);
-	if ((data())->he_pipe[P_WR] >= 0)
-		close((data())->he_pipe[P_WR]);
+	if (!fd_update((data())->he_pipe[P_RD], -1)
+		|| !fd_update((data())->he_pipe[P_WR], -1))
+		return (0);
 	if (pipe((data())->he_pipe) < 0)
 		return (iperror("minishell: pipe failed", 0));
 	htmp = (data())->he_start;
 	i = -1;
 	while (++i < (data())->he_read)
 		htmp = htmp->next;
+	(data())->he_read++;
 	ltmp = htmp->heredoc;
 	while (ltmp)
 	{
-		write((data())->he_pipe[P_WR]);
+		if (!ft_putstrn_fd(ltmp->line, (data())->he_pipe[P_WR]))
+			return (0);
 		ltmp = ltmp->next;
 	}
+	if (!fd_update(&(struc->to_close[P_WR]), (data())->he_pipe[P_WR])
+		|| !fd_update(&(struc->input), (data())->he_pipe[P_RD]))
+		return (0);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 21:24:01 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 17:08:52 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/07/29 18:20:14 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int			ft_isprint(int c);
 char		*ft_itoa(int n);
 int			ft_putnbr_fd(long long n, int fd);
 int			ft_putstr_fd(char *s, int fd);
+int			ft_putstrn_fd(char *s, int fd);
 char		**ft_split(char const *s, char c);
 int			ft_strchr(char *str, const char *to_find);
 char		*ft_strdup(const char *s);

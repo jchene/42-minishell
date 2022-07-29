@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:51:05 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/29 14:55:32 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/29 18:49:59 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	init_exec(void)
 	(data())->skip_exec = 0;
 	(data())->exec_struc->input = -1;
 	(data())->exec_struc->output = -1;
-	(data())->exec_struc->to_close[0] = -1;
-	(data())->exec_struc->to_close[1] = -1;
+	(data())->exec_struc->to_close[P_RD] = -1;
+	(data())->exec_struc->to_close[P_WR] = -1;
 	(data())->he_pipe[P_RD] = -1;
 	(data())->he_pipe[P_WR] = -1;
 	return (1);
@@ -63,17 +63,17 @@ int	free_exec(int ret)
 		free((data())->exec_struc);
 		(data())->exec_struc = NULL;
 	}
-	if ((data())->old_pipe[P_RD] >= 0)
-		close((data())->old_pipe[P_RD]);
-	if ((data())->old_pipe[P_WR] >= 0)
-		close((data())->old_pipe[P_WR]);
-	if ((data())->new_pipe[P_RD] >= 0)
-		close((data())->new_pipe[P_RD]);
-	if ((data())->new_pipe[P_WR] >= 0)
-		close((data())->new_pipe[P_WR]);
-	if ((data())->he_pipe[P_RD] >= 0)
-		close((data())->he_pipe[P_RD]);
-	if ((data())->he_pipe[P_WR] >= 0)
-		close((data())->he_pipe[P_WR]);
+	if (!fd_update((data())->old_pipe[P_RD], -1))
+		return (0);
+	if (!fd_update((data())->old_pipe[P_WR], -1))
+		return (0);
+	if (!fd_update((data())->new_pipe[P_RD], -1))
+		return (0);
+	if (!fd_update((data())->new_pipe[P_WR], -1))
+		return (0);
+	if (!fd_update((data())->he_pipe[P_RD], -1))
+		return (0);
+	if (!fd_update((data())->he_pipe[P_WR], -1))
+		return (0);
 	return (ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 19:34:34 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 18:48:15 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/07/29 18:50:23 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	create_history_file(void)
 		free(temp->str);
 		free(temp);
 	}
-	close (fd);
+	if (!fd_update(fd, -1))
+		return (0);
 	return (1);
 }
 
