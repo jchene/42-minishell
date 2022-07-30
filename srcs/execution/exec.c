@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/29 18:48:32 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/30 17:34:34 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	child_process(t_exec *struc, char **envp)
 	if (struc->output >= 0)
 		if (dup2(struc->output, STDOUT_FILENO) < 0)
 			return (iperror("minishell: dup2", 0));
-	if (!reset_fd(struc->to_close[P_RD]) || !reset_fd(struc->to_close[P_WR]))
+	if (!fd_update(&struc->to_close[P_RD], -1) || !fd_update(&struc->to_close[P_WR], -1))
+		return (0);
+	if (!fd_update(&struc->out_pipe[P_RD], -1) || !fd_update(&struc->out_pipe[P_WR], -1))
 		return (0);
 	if (!access(struc->path, F_OK))
 		if (execve(struc->path, struc->args, envp) < 0)
@@ -32,17 +34,20 @@ int	child_process(t_exec *struc, char **envp)
 
 int	switch_pipe(void)
 {
-	if (!fd_update((data())->old_pipe[P_RD], -1))
+	if (!fd_update(&(data())->old_pipe[P_RD], -1))
 		return (0);
 	if ((data())->new_pipe[P_RD] != -1)
 		(data())->old_pipe[P_RD] = (data())->new_pipe[P_RD];
-	if (!fd_update((data())->old_pipe[P_WR], -1))
+	if (!fd_update(&(data())->old_pipe[P_WR], -1))
 		return (0);
 	if ((data())->new_pipe[P_WR] != -1)
 		(data())->old_pipe[P_WR] = (data())->new_pipe[P_WR];
 	if (pipe_at_end((data())->p_index))
+	{
 		if (pipe((data())->new_pipe) < 0)
 			return (iperror("minishell: pipe failed", 0));
+		//fprintf(stderr, "%snew_pipe: RD:%d WR:%d%s\n", RED_CODE, (data())->new_pipe[P_RD], (data())->new_pipe[P_WR], RESET_CODE);
+	}
 	return (1);
 }
 

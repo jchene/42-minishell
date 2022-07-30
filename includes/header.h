@@ -102,6 +102,7 @@ typedef struct s_exec
 	int					input;
 	int					output;
 	int					to_close[2];
+	int					out_pipe[2];
 	char				*path;
 	char				**args;
 }						t_exec;

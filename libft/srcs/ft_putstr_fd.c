@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 02:04:54 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/29 18:20:35 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/30 16:48:06 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ int	ft_putstr_fd(char *s, int fd)
 
 	i = -1;
 	while (s[++i])
-		if (write(fd, s[i], 1) < 0)
-			return (iperror("minishell: write failed", 0));
+	{
+		if (write(fd, &s[i], 1) < 0)
+		{
+			perror("minishell: write failed");
+			return (0);
+		}
+	}
 	return (1);
 }
 
@@ -31,9 +36,17 @@ int	ft_putstrn_fd(char *s, int fd)
 
 	i = -1;
 	while (s[++i])
-		if (write(fd, s[i], 1) < 0)
-			return (iperror("minishell: write failed", 0));
+	{
+		if (write(fd, &s[i], 1) < 0)
+		{
+			perror("minishell: write failed");
+			return (0);
+		}
+	}
 	if (write(fd, "\n", 1) < 0)
-		return (iperror("minishell: write failed", 0));
+	{
+		perror("minishell: write failed");
+		return (0);
+	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/29 19:00:54 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/30 17:34:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,16 @@ int	pipe_at_end(t_parsing *cursor)
 //Closes securely fd at fd_ptr and puts value into ft_ptr
 int	fd_update(int *fd_ptr, int value)
 {
-	fprintf(stderr, "%sfd %d updated to %d%s\n", CYAN_CODE, *fd_ptr, value, RESET_CODE);
 	if (*fd_ptr >= 0)
+	{
+		//fprintf(stderr, "%s[%d]fd trying to update %d to %d%s\n", CYAN_CODE, getpid(), *fd_ptr, value, RESET_CODE);
 		if (close(*fd_ptr) < 0)
+		{
+			//fprintf(stderr, "close failed for %d\n", getpid());
 			return (iperror("minishell: close failed", 0));
+		}
+		//fprintf(stderr, "%s[%d]fd %d updated to %d%s\n", CYAN_CODE, getpid(), *fd_ptr, value, RESET_CODE);
+	}
 	*fd_ptr = value;
 	return (1);
 }

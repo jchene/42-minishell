@@ -40,7 +40,7 @@ int	init_data(char **envp)
 	(data())->he_start = NULL;
 	(data())->he_read = 0;
 	if (envp[0])
-		if (!cp_envp)
+		if (!cp_envp(envp))
 			return (0);
 	return (1);
 }

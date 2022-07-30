@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 16:16:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/21 00:06:53 by jchene           ###   ########.fr       */
+/*   Updated: 2022/07/30 17:34:37 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,16 @@ int	fill_outfile(t_parsing *cursor, t_exec *struc, int flag)
 		return (iperror("Minishell: outfile open", 1));
 	}
 	//fprintf(stderr, "%sOpening '%s' on fd '%d'%s\n", YELLOW_CODE, cursor->next->str, redir, RESET_CODE);
-	if (!fd_update(&struc->output, redir))
-		return (0);
+	if (struc->output == (data())->new_pipe[P_WR])
+	{
+		struc->out_pipe[P_RD] = (data())->new_pipe[P_RD];
+		struc->out_pipe[P_WR] = (data())->new_pipe[P_WR];
+		struc->output = redir;
+		struc->to_close[P_RD] = -1;
+	}
+	else
+		if (!fd_update(&(struc->output), redir))
+			return (0);
 	return (1);
 }
 
