@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 18:44:23 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/25 20:49:02 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 05:54:10 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ int	replace_it(int finded, char **old, char **buff)
 		return (0);
 	free((data())->p_index->str);
 	(data())->p_index->str = ft_strjoin(*buff, (data())->temp);
-	free(*buff);
-	*buff = NULL;
-	free(*old);
-	*old = NULL;
+	if (!(data())->p_index->str)
+		return (0);
 	return (1);
 }
 
@@ -78,17 +76,16 @@ int	convert_it(int size, int k, int finded)
 	}
 	ret = replace_it(finded, &old, &buff);
 	if (old)
-		free (old);
+		free(old);
 	if (buff)
-		free (buff);
+		free(buff);
+	if ((data())->temp)
+		free((data())->temp);
 	return (ret);
 }
 
 int	dollar_finded(void)
 {
-	(data())->j = (data())->i;
-	if (is_quoted((data())->j, 0))
-		return (1);
 	while ((data())->p_index->str[(data())->j])
 	{
 		(data())->j++;
@@ -100,24 +97,42 @@ int	dollar_finded(void)
 					(data())->j - (data())->i - 1, (data())->i + 1);
 			if (!(data())->temp)
 				return (0);
-			if (!convert_it(ft_strlen((data())->temp), -1, 0))
-				return (0);
-			free((data())->temp);
-			(data())->temp = NULL;
-			return (1);
+			if (ft_strncmp((data())->temp, "?", 1))
+			{
+				free((data())->temp);
+				free((data())->p_index->str);
+				(data())->p_index->str = ft_itoa((data())->exit_code);
+				if (!(data())->p_index->str)
+					return (0);
+			}
+			return (convert_it(ft_strlen((data())->temp), -1, 0));
 		}
 	}
 	return (1);
 }
 
-int	rm_dollars(void)
+int	rm_dollars(t_parsing *start, t_parsing *temp, int from_hrd)
 {
-	(data())->p_index = (data())->p_start;
+	(data())->p_index = start;
+	temp = (data())->p_start;
 	while ((data())->p_index)
 	{
+		if (from_hrd)
+		{
+			while (temp && temp->flag != HDL)
+				temp = temp->next;
+			if (temp && temp->flag == HDL && temp->was_quoted)
+			{
+				temp = temp->next;
+				(data())->p_index = (data())->p_index->next;
+				continue ;
+			}
+		}
 		(data())->i = -1;
 		while ((data())->p_index->str[++(data())->i])
-			if ((data())->p_index->str[(data())->i] == '$')
+			if ((data())->p_index->str[(data())->i] == '$'
+					&& set_int(&(data())->j, (data())->i, 1)
+					&& (!from_hrd && is_quoted(((data())->j), 0)))
 				if (!dollar_finded())
 					return (0);
 		(data())->p_index = (data())->p_index->next;

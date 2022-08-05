@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 02:04:54 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/30 16:48:06 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 10:55:54 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,6 @@ int	ft_putstrn_fd(char *s, int fd)
 			perror("minishell: write failed");
 			return (0);
 		}
-	}
-	if (write(fd, "\n", 1) < 0)
-	{
-		perror("minishell: write failed");
-		return (0);
 	}
 	return (1);
 }

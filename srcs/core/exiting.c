@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exiting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 20:50:05 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/15 18:44:36 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/04 14:51:12 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,20 @@ void	some_more_free(void)
 {
 	if ((data())->exec_struc)
 		free(data()->exec_struc);
-	if ((data())->p_start)
-		free_p_struct();
-	if ((data())->exp_start)
-		free_exp_struct();
 	if ((data())->line)
 		free((data())->line);
 	if ((data())->temp)
 		free((data())->temp);
 	if ((data())->child_ids)
 		free((data())->child_ids);
+	if ((data())->envp)
+		free_str_tab2((data())->envp);
+	if ((data())->p_start)
+		free_p_struct(&(data())->p_start);
+	if ((data())->exp_start)
+		free_exp_struct();
+	if ((data())->he_start)
+		free_p_struct(&(data())->he_start);
 }
 
 int	exit_properly(int ret)
@@ -40,9 +44,7 @@ int	exit_properly(int ret)
 	}
 	if ((data())->h_start)
 		if (!create_history_file())
-			perror("Create History Error");
+			perror("Error while creating history file ");
 	some_more_free();
-	/*if (ret == -1)
-		perror("Error");*/
 	return (ret);
 }

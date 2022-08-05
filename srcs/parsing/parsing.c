@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 09:34:26 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/22 15:04:44 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/04 14:11:36 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@ int	fill_p_struct_str(void)
 			(data())->j - (data())->i, (data())->i);
 	if (!(data())->p_index->str)
 		return (0);
-	return (1);
-}
-
-int	free_p_struct(void)
-{
-	t_parsing	*temp;
-
-	(data())->p_index = (data())->p_start;
-	while ((data())->p_index)
-	{
-		temp = (data())->p_index;
-		(data())->p_index = (data())->p_index->next;
-		free(temp->str);
-		free(temp);
-	}
-	(data())->p_start = NULL;
 	return (1);
 }
 
@@ -70,6 +54,7 @@ int	read_input(void)
 	{
 		ft_putstr_fd("exit\n", 1);
 		(data())->stop = 1;
+		return (0);
 	}
 	if ((data())->line && (data())->line[0])
 	{

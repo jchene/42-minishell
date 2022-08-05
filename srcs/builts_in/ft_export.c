@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:49 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/06 14:28:15 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 11:07:57 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	invalid_export(char *str)
 {
-	ft_putstr_fd("bash: export: `", STDOUT_FILENO);
-	ft_putstr_fd(str, STDOUT_FILENO);
-	ft_putstr_fd("': not a valid identifier\n", STDOUT_FILENO);
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	return (-1);
 }
 
@@ -26,7 +26,7 @@ int	envp_will_change(char *str)
 	if (!(data())->temp)
 		return (0);
 	if (!(data())->envp)
-		(data())->envp = add_to_envp(NULL, str);
+		(data())->envp = add_to_envp(NULL, str, NULL);
 	else if (!is_in_env((data())->temp))
 	{
 		free((data())->temp);
@@ -34,51 +34,58 @@ int	envp_will_change(char *str)
 		if (!(data())->old_envp)
 			return (0);
 		free_str_tab2((data())->envp);
-		(data())->envp = add_to_envp((data())->old_envp, str);
-		if (!(data())->envp)
-			return (0);
+		(data())->envp = add_to_envp((data())->old_envp, str, NULL);
 		free_str_tab2((data())->old_envp);
 	}
 	else if (!update_env(str))
 		return (0);
 	if (!(data())->envp)
 		return (0);
+	(data())->envp_size++;
 	return (1);
 }
 
-void	print_exp_struct(void)
+int	print_exp_struct(int fd)
 {
 	(data())->exp_index = (data())->exp_start;
 	while ((data())->exp_index)
 	{
-		printf("export %s\n", (data())->exp_index->str);
+		ft_putstr_fd("export ", fd);
+		ft_putstr_fd((data())->exp_index->str, fd);
+		ft_putstr_fd("\n", fd);
 		(data())->exp_index = (data())->exp_index->next;
-	}		
+	}
+	return (-1);
 }
 
-int	ft_export(char *str)
+int	ft_export(char **str, int fd)
 {
-	if (!str)
-		print_exp_struct();
-	else
-	{
+	int	i;
+
+	i = 0;
+	while (str && str[++i])
+	{	
+		if (!str[i])
+			return (print_exp_struct(fd));
 		(data())->i = -1;
-		while (str[++(data())->i] && str[(data())->i] != '=')
-			if (!ft_isalnum(str[(data())->i]) && str[(data())->i] != '_')
-				return (invalid_export(str));
-		if (str[(data())->i] && !envp_will_change(str))
-			return (0);
+		while (str[i][++(data())->i] && str[i][(data())->i] != '=')
+			if (!ft_isalnum(str[i][(data())->i]) && str[i][(data())->i] != '_')
+				return (invalid_export(str[i]));
+		if (str[i][(data())->i] && !envp_will_change(str[i]))
+			return (-1);
 		if (!(data())->exp_start)
 		{
 			(data())->exp_start = malloc(sizeof(t_export));
 			if (!(data())->exp_start)
-				return (0);
-			(data())->exp_start->str = str;
+				return (-1);
 			(data())->exp_start->prev = NULL;
 			(data())->exp_start->next = NULL;
+			(data())->exp_start->str = ft_strdup(str[i]);
+			if (!(data())->exp_start->str)
+				return (-1);
 		}
-		else
-			add_to_exp_struct(str);
+		else if (!add_to_exp_struct(str[i]))
+			return (-1);
 	}
-	return (1);
+	return (0);
 }

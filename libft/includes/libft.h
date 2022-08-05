@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 21:24:01 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/29 18:20:14 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/02 03:00:26 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int			ft_tolower(int c);
 int			ft_toupper(int c);
 int			return_max(int n1, int n2);
 int			return_min(int n1, int n2);
-int			str_tab2_fucked_up(char	**tab, int size);
+int			str_tab2_fucked_up(char	***tab, int size);
 
 #endif

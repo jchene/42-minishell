@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 19:34:34 by anguinau          #+#    #+#             */
-/*   Updated: 2022/07/30 16:49:13 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/02 03:45:54 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	ft_clear_history(void)
 	{
 		temp = (data())->h_index;
 		(data())->h_index = (data())->h_index->next;
-		free(temp->str);
+		if (temp->str)
+			free(temp->str);
 		free(temp);
 	}
-	(data())->h_start = NULL;
 	return (0);
 }
 
@@ -43,10 +43,11 @@ int	create_history_file(void)
 		write(fd, "\n", 1);
 		temp = (data())->h_index;
 		(data())->h_index = (data())->h_index->next;
-		free(temp->str);
+		if (temp->str)
+			free(temp->str);
 		free(temp);
 	}
-	if (!fd_update(&fd, -1))
+	if (close(fd) < 0)
 		return (0);
 	return (1);
 }
@@ -72,13 +73,14 @@ int	init_history(char *str)
 	(data())->h_start = malloc(sizeof(t_history));
 	if (!(data())->h_start)
 		return (0);
+	(data())->h_start->next = NULL;
+	(data())->h_start->prev = NULL;
 	(data())->h_start->str = ft_strdup(str);
 	if (!(data())->h_start->str)
 	{
 		free((data())->h_start);
+		(data())->h_start = NULL;
 		return (0);
 	}
-	(data())->h_start->next = NULL;
-	(data())->h_start->prev = NULL;
 	return (1);
 }

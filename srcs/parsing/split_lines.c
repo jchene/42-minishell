@@ -3,42 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   split_lines.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 19:17:58 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/25 19:17:55 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/03 02:12:09 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-int	something_behind_redir(int backup)
-{
-	if (ft_isdigit((data())->line[(data())->j - 1]))
-	{
-		while ((data())->j > 0 && ft_isdigit((data())->line[(data())->j - 1]))
-			(data())->j--;
-		if ((data())->j == (data())->i)
-		{
-			(data())->j = backup;
-			return (1);
-		}
-	}
-	if (!fill_p_struct_str())
-		return (0);
-	(data())->i = (data())->j;
-	if (!new_p_struct_member())
-		return (0);
-	while (ft_isdigit((data())->line[(data())->j]))
-		(data())->j++;
-	return (1);
-}
-
 int	redir_finded(void)
 {
 	if ((data())->j != (data())->i)
-		if (!something_behind_redir((data())->j))
+	{
+		if (!fill_p_struct_str())
 			return (0);
+		(data())->i = (data())->j;
+		if (!new_p_struct_member())
+			return (0);
+	}
 	(data())->j++;
 	while ((data())->line[(data())->j] && ((data())->line[(data())->j] == '>'
 			|| (data())->line[(data())->j] == '<'))

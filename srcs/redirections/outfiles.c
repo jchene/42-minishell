@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfiles.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 16:16:46 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/30 17:34:37 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 06:12:39 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ void	*fill_outpipe(t_exec *struc)
 {
 	if (!fd_update(&struc->output, (data())->new_pipe[P_WR]))
 		return (NULL);
-	if (!fd_update(&struc->to_close[1], (data())->new_pipe[P_RD]))
+	if (!fd_update(&struc->to_close[P_RD], (data())->new_pipe[P_RD]))
 		return (NULL);
-	//fprintf(stderr, "%sFilled output-close with fd %d-%d%s\n", YELLOW_CODE, struc->output, struc->to_close[1], RESET_CODE);
 	return (struc);
 }
 
@@ -29,13 +28,12 @@ int	fill_outfile(t_parsing *cursor, t_exec *struc, int flag)
 	if (flag == ROF)
 		redir = open(cursor->next->str, O_WRONLY | O_TRUNC | O_CREAT, 00622);
 	else
-		redir = open(cursor->next->str, O_WRONLY | O_APPEND, 00622);
+		redir = open(cursor->next->str, O_WRONLY | O_APPEND | O_CREAT, 00622);
 	if (redir < 0)
 	{
 		(data())->skip_exec = 1;
-		return (iperror("Minishell: outfile open", 1));
+		return (iperror("minishell: outfile open", 1));
 	}
-	//fprintf(stderr, "%sOpening '%s' on fd '%d'%s\n", YELLOW_CODE, cursor->next->str, redir, RESET_CODE);
 	if (struc->output == (data())->new_pipe[P_WR])
 	{
 		struc->out_pipe[P_RD] = (data())->new_pipe[P_RD];
@@ -43,18 +41,14 @@ int	fill_outfile(t_parsing *cursor, t_exec *struc, int flag)
 		struc->output = redir;
 		struc->to_close[P_RD] = -1;
 	}
-	else
-		if (!fd_update(&(struc->output), redir))
-			return (0);
+	else if (!fd_update(&(struc->output), redir))
+		return (0);
 	return (1);
 }
 
 //Return a sorted tab of all outfile fds in the pipe bock
-void	*get_outfiles(t_parsing *cursor, t_exec *struc)
+void	*get_outfiles(t_parsing *tmp, t_exec *struc)
 {
-	t_parsing	*tmp;
-
-	tmp = cursor;
 	if (tmp && tmp->flag == PIP)
 		tmp = tmp->next;
 	if (tmp && pipe_at_end(tmp))

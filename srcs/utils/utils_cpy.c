@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:57:55 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/05 19:16:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/03 05:52:26 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_strcpy(char *src, char *dst)
 {
 	while (*src)
 		*dst++ = *src++;
+	*dst++ = *src++;
 }
 
 int	ft_strmcpy(char *src, char **dst)

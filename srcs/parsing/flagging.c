@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flagging.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 14:27:28 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/15 16:52:34 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 06:09:01 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,51 +15,18 @@
 //Return 1 si word est une redirection, 0 sinon, inscrit le bon flag dans flag
 int	is_redir(char *word, int *flag)
 {
-	int	i;
-
-	i = 0;
-	while (ft_isdigit(word[i]))
-		i++;
-	if (word[i] && word[i] == '<' && (!word[i + 1] || (word[i + 1]
-				&& word[i + 1] != word[i])))
+	if (word[0] && word[0] == '<'
+		&& (!word[1] || (word[1] && word[1] != word[0])))
 		return (set_int(flag, INF, 1));
-	else if (word[i] && word[i] == '>' && (!word[i + 1] || (word[i + 1]
-				&& word[i + 1] != word[i])))
+	else if (word[0] && word[0] == '>'
+		&& (!word[1] || (word[1] && word[1] != word[0])))
 		return (set_int(flag, ROF, 1));
-	else if (word[i] && word[i] == '<' && word[i + 1] && word[i + 1] == '<')
+	else if (word[0] == '<' && word[1] && word[1] == '<')
 		return (set_int(flag, HRD, 1));
-	else if (word[i] && word[i] == '>' && word[i + 1] && word[i + 1] == '>')
+	else if (word[0] == '>' && word[1] && word[1] == '>')
 		return (set_int(flag, AOF, 1));
 	else
 		return (set_int(flag, INV, 0));
-}
-
-//Return la chaine de caracteres correspondante au flag
-const char	*flag_name(int flag)
-{
-	if (flag == INF)
-		return ("INFILE");
-	else if (flag == HRD)
-		return ("HEREDOC");
-	else if (flag == ROF)
-		return ("REPLACE FILE");
-	else if (flag == AOF)
-		return ("APPEND FILE");
-	else if (flag == FLN)
-		return ("FILENAME");
-	else if (flag == HDL)
-		return ("HEREDOC DELIM");
-	else if (flag == CMD)
-		return ("COMMAND");
-	else if (flag == ARG)
-		return ("ARGUMENT");
-	else if (flag == PIP)
-		return ("PIPE");
-	else if (flag == NWL)
-		return ("NEWLINE");
-	else if (flag == INV)
-		return ("INVALID");
-	return (NULL);
 }
 
 //Return le flag correspondant au mot du p_index actuel
@@ -127,9 +94,8 @@ int	flag_words(void)
 		(data())->p_index->flag = get_flag();
 		(data())->p_index = (data())->p_index->next;
 	}
-	check_symbols(&wrong_char[0]);
-	//display_list();
-	if (!check_invalids(&wrong_char[0]))
+	check_symbols(wrong_char);
+	if (!check_invalids(wrong_char))
 		return (0);
 	return (1);
 }

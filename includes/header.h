@@ -62,13 +62,6 @@
 # define PIP		8	//	PIPE
 # define NWL		9	//	NEWLINE
 
-typedef struct s_history
-{
-	char				*str;
-	struct s_history	*next;
-	struct s_history	*prev;
-}						t_history;
-
 typedef struct s_export
 {
 	char				*str;
@@ -76,26 +69,21 @@ typedef struct s_export
 	struct s_export		*prev;
 }						t_export;
 
+typedef struct s_history
+{
+	char				*str;
+	struct s_history	*next;
+	struct s_history	*prev;
+}						t_history;
+
 typedef struct s_parsing
 {
 	char				*str;
 	int					flag;
+	int					was_quoted;
 	struct s_parsing	*next;
 	struct s_parsing	*prev;
 }						t_parsing;
-
-typedef struct s_hrd_line
-{
-	char				*line;
-	struct s_hrd_line	*next;
-}						t_hrd_line;
-
-typedef struct s_heredoc
-{
-	t_hrd_line			*heredoc;
-	char				*delimiter;
-	struct s_heredoc	*next;
-}						t_heredoc;
 
 typedef struct s_exec
 {
@@ -103,47 +91,65 @@ typedef struct s_exec
 	int					output;
 	int					to_close[2];
 	int					out_pipe[2];
+	int					exit_code;
 	char				*path;
 	char				**args;
 }						t_exec;
 
 typedef struct s_data
 {
-	int			i;
-	int			j;
-	int			stop;
-	int			exit_code;
-	int			exit_calls;
-	int			*child_ids;
-	char		*line;
-	char		*temp;
-	char		**path;
-	char		**envp;
-	int			envp_size;
-	char		**old_envp;
+	t_export	*exp_index;
+	t_export	*exp_start;
+	t_export	*exp_end;
 	t_history	*h_start;
 	t_history	*h_index;
 	t_parsing	*p_start;
 	t_parsing	*p_index;
-	t_export	*exp_index;
-	t_export	*exp_start;
-	t_export	*exp_end;
+	t_parsing	*he_start;
+	t_parsing	*he_index;
 	t_exec		*exec_struc;
-	t_heredoc	*he_start;
+	int			envp_size;
+	char		**old_envp;
+	char		**envp;
+	char		**path;
+	char		*line;
+	int			lines_executed;
+	int			stop;
+	int			exit_code;
+	int			got_from_builtsin;
+	pid_t		*child_ids;
 	int			he_read;
 	int			he_pipe[2];
 	int			old_pipe[2];
 	int			new_pipe[2];
 	int			skip_exec;
 	int			last_skip;
+	char		*temp;
+	int			i;
+	int			j;
 }				t_data;
 
-//				CORE
+//				ENV MANAGEMENT
+
+char			**add_to_envp(char **src, char *new, char **dst);
+int				update_env(char *new);
+int				create_exp_struct(void);
+int				add_to_exp_struct(char *str);
+int				free_exp_struct(void);
+int				is_in_env(char *to_find);
+int				envp_will_change(char *str);
+
+//				INIT
+
+int				init_data(char **envp);
+
+//				SIGNALS
+
+int				ft_signal(void);
+
+//				EXIT
 
 int				exit_properly(int ret);
-int				free_exec(int ret);
-int				init_data(char **envp);
-int				new_prompt(void);
 
 //				HISTORY
 
@@ -156,14 +162,13 @@ int				ft_clear_history(void);
 
 int				read_input(void);
 int				split_line(void);
-int				rm_dollars(void);
+int				rm_dollars(t_parsing *start, t_parsing *temp, int from_hrd);
 int				rm_quotes(void);
 int				replace_it(int finded, char **old, char **buff);
 
 //				FLAGGING
 
 int				is_redir(char *word, int *flag);
-const char		*flag_name(int flag);
 int				get_flag(void);
 void			check_symbols(char *first_wrong_char);
 int				check_invalids(char *first_wrong_char);
@@ -177,68 +182,49 @@ int				nb_cmds(int reset);
 int				wait_all(void);
 int				init_exec(void);
 int				pipe_at_end(t_parsing *cursor);
-int				new_pipe(void);
-int				init_close(t_exec *struc);
 int				fill_e_struc(t_exec *struc, char **envp);
-int				child_process(t_exec *struc, char **envp);
-int				start_exec(char **envp);
-int				close_exec(t_exec *struc);
-
-//				PATH
-
-int				env_diff(char *env_name, char *env_value);
-int				get_env_index(char *env_name, char **envp);
 char			*get_path(char *string, t_exec *struc, char **envp);
-char			*add_arg(char *str, t_exec *struc);
-char			**get_args(t_parsing *cursor, t_exec *struc, char **envp);
+int				is_builtin(char *str);
+int				start_exec(char **envp);
+int				child_process(t_exec *struc, char **envp);
+int				free_exec(void);
+int				exit_exec(int ret);
+void			apply_builtin(t_exec *struc, int ret, int is_last);
+int				exec_builtin(t_exec *struc);
 
 //				HEREDOCS
 
 int				init_heredocs(void);
-int				insert_hrd(t_heredoc *heredoc);
-void			display_hrd(t_heredoc *heredoc);
-int				insert_line(t_heredoc *heredoc, char *line);
-int				count_hrd_list(void);
-int				count_hrd_lines(t_heredoc *heredoc);
-void			display_all_heredocs(void);
-void			clear_all_heredocs(t_heredoc *heredoc);
-void			clear_heredoc(t_hrd_line *line);
+char			*end_of_hrd(t_parsing *lines);
+
+//				PATH
+
+int				get_env_index(char *env_name, char **envp);
+char			*get_path(char *string, t_exec *struc, char **envp);
+char			*add_arg(char *str, t_exec *struc);
+char			**get_args(t_parsing *tmp, t_exec *struc, char **envp);
 
 //				REDIRECTIONS
 
-void			*fill_with_infiles(t_parsing *cursor, t_exec *struc);
-void			*fill_with_heredocs(t_parsing *cursor, t_exec *struc);
-void			*fill_with_outfiles(t_parsing *cursor, t_exec *struc);
-void			*get_infiles(t_parsing *cursor, t_exec *struc);
-void			*get_outfiles(t_parsing *cursor, t_exec *struc);
+void			*get_infiles(t_parsing *tmp, t_exec *struc);
+void			*get_outfiles(t_parsing *tmp, t_exec *struc);
 int				count_block_flags(t_parsing *cursor, int flag);
 int				count_list_flags(int flag);
 
-//				SIGNALS
+//				BUILTS IN
 
-int				ft_signal(void);
-
-//				BUILT IN
-
-int				ft_pwd(void);
-void			ft_exit(int exit_code);
-void			ft_echo(int n, char *str);
-int				fd_cd(char *dir);
-int				ft_export(char *str);
-
-//				ENV MANAGEMENT
-
-char			**add_to_envp(char **src, char *new);
-int				update_env(char *new);
-int				create_exp_struct(void);
-int				add_to_exp_struct(char *str);
-int				free_exp_struct(void);
-int				is_in_env(char *to_find);
+int				ft_pwd(int fd);
+void			ft_exit(void);
+int				ft_echo(char **str, int fd);
+int				ft_cd(char **dir);
+int				ft_export(char **str, int fd);
+int				ft_env(int fd);
+int				ft_unset(char **name);
 
 //				STRUCTURE MANAGEMENT
 
 int				new_p_struct_member(void);
-int				free_p_struct(void);
+int				free_p_struct(t_parsing **start);
 int				fill_p_struct_str(void);
 int				join_p_struc(t_parsing *member1, t_parsing *member2);
 
@@ -274,6 +260,7 @@ int				*is_s_quoted(void);
 
 int				itern(int exp, int ret1, int ret2);
 void			*ptern(int exp, void *ret1, void *ret2);
+int				is_equal(int nbr, int to_find, int ret_true, int ret_false);
 
 //				NORM HELPING - COPY
 
@@ -284,5 +271,6 @@ int				strict_cmp(char *s1, char *s2);
 //				TEMP
 
 void			display_list(void);
+void			display_heredocs(void);
 
 #endif

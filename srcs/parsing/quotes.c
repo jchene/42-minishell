@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 22:01:06 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 18:48:15 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/04 22:37:37 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ int	remove_quotes(void)
 	buff = NULL;
 	ret = replace_it(1, &old, &buff);
 	if (old)
-		free (old);
+		free(old);
 	if (buff)
-		free (buff);
+		free(buff);
+	if ((data())->temp)
+		free((data())->temp);
+	(data())->p_index->was_quoted = 1;
 	return (ret);
 }
 
@@ -37,6 +40,8 @@ int	quote_finded(int quote, int ret)
 		{
 			(data())->temp = ft_strndup((data())->p_index->str,
 					(data())->j - (data())->i - 1, (data())->i + 1);
+			if (!(data())->temp)
+				return (0);
 			(data())->j++;
 			ret = remove_quotes();
 			if (!ret)
@@ -46,9 +51,6 @@ int	quote_finded(int quote, int ret)
 		else
 			(data())->j++;
 	}
-	(data())->i = (data())->j;
-	if (!(data())->p_index->str[(data())->i])
-		(data())->i--;
 	return (ret);
 }
 
@@ -58,6 +60,7 @@ int	rm_quotes(void)
 	while ((data())->p_index)
 	{
 		(data())->i = -1;
+		(data())->p_index->was_quoted = 0;
 		while ((data())->p_index->str[++(data())->i])
 			if ((data())->p_index->str[(data())->i] == S_QUOTE
 				|| (data())->p_index->str[(data())->i] == D_QUOTE)

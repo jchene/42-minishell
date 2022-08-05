@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_mem.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 17:24:42 by jchene            #+#    #+#             */
-/*   Updated: 2022/06/27 16:01:09 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/01 22:14:39 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	*ft_calloc(size_t size)
 	ptr = (void *)malloc(size);
 	if (!ptr)
 	{
-		perror("malloc failed");
+		perror("Error ");
 		return (NULL);
 	}
 	ft_memset(ptr, 0, size);

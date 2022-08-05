@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jchene <jchene@student.42.fr>              +#+  +:+       +#+         #
+#    By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:37:32 by anguinau          #+#    #+#              #
-#    Updated: 2022/07/12 15:54:01 by jchene           ###   ########.fr        #
+#    Updated: 2022/08/05 08:27:55 by anguinau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,21 +115,6 @@ define update_bar =
 	endif
 endef
 
-# define update_bar =
-# 	progress=$(shell echo "$(INDEX) * 35 / $(BUILD_SIZE)" | bc); \
-# 	bar=""; \
-# 	for i in $(seq 0 $progress); do \
-# 		echo "test"; \
-# 		bar=$(echo "$bar" "o"); \
-# 	done; \
-# 	for i in $(seq $progress 32); do \
-# 		bar=$(echo "$bar" " "); \
-# 	done; \
-# 	E_BAR="$_RED-$_YELLOW-$_GREEN>$_STOP[$_RED$bar$_STOP]$_GREEN<$_YELLOW-$_RED-$_STOP[$_RED0%]$_STOP"; \
-# 	echo $E_BAR
-# endef
-
-
 # Rules
 
 all				:	$(NAME)
@@ -161,7 +146,7 @@ $(OBJSDIR)		:
 					@$(eval BUILD_SIZE=$(shell echo $$(($(BUILD_SIZE)+1))))
 					@$(eval $(call update_bar))
 					
-$(OBJS_SUBDIR)		:
+$(OBJS_SUBDIR)	:
 					@mkdir $(OBJS_SUBDIR)
 					@$(eval INDEX=$(shell echo $$(($(INDEX)+1))))
 					@$(eval BUILD_SIZE=$(shell echo $$(($(BUILD_SIZE)+1))))

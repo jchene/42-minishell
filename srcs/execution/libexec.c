@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libexec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/30 17:34:35 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 09:34:06 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ int	nb_cmds(int flag)
 int	wait_all(void)
 {
 	int	i;
+	int	temp;
 
 	i = -1;
 	while (++i < nb_cmds(NO_UP))
 		if ((data())->child_ids[i] != -1)
-			if (waitpid((data())->child_ids[i], NULL, 0) < 0)
+			if (waitpid((data())->child_ids[i], &temp, 0) < 0)
 				return (iperror("minishell: waitpid", 0));
+	if (!(data())->got_from_builtsin)
+		(data())->exit_code = WEXITSTATUS((data())->exit_code);
 	return (1);
 }
 
@@ -57,7 +60,7 @@ int	pipe_at_end(t_parsing *cursor)
 		tmp = tmp->next;
 	while (tmp && tmp->flag != PIP)
 		tmp = tmp->next;
-	if (tmp && tmp->flag == PIP)
+	if (tmp)
 		return (1);
 	return (0);
 }
@@ -67,13 +70,8 @@ int	fd_update(int *fd_ptr, int value)
 {
 	if (*fd_ptr >= 0)
 	{
-		//fprintf(stderr, "%s[%d]fd trying to update %d to %d%s\n", CYAN_CODE, getpid(), *fd_ptr, value, RESET_CODE);
 		if (close(*fd_ptr) < 0)
-		{
-			//fprintf(stderr, "close failed for %d\n", getpid());
-			return (iperror("minishell: close failed", 0));
-		}
-		//fprintf(stderr, "%s[%d]fd %d updated to %d%s\n", CYAN_CODE, getpid(), *fd_ptr, value, RESET_CODE);
+			return (iperror("minishell: close", 0));
 	}
 	*fd_ptr = value;
 	return (1);

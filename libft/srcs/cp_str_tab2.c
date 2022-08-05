@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 03:56:20 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 16:05:31 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/01 19:57:56 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ char	**cp_str_tab2(char **src)
 	char	**dst;
 	int		i;
 
-	i = -1;
-	while (src[++i])
-		continue ;
+	i = 0;
+	while (src[i])
+		i++ ;
 	dst = malloc(sizeof(char *) * (i + 1));
 	if (!dst)
 		return (NULL);

@@ -6,14 +6,14 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:47 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 18:41:58 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 11:05:44 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-void	ft_exit(int exit_code)
+void	ft_exit(void)
 {
-	(data())->exit_code = exit_code;
-	(data())->exit_calls++;
+	if (ft_strncmp((data())->p_start->str, "exit", 4))
+		data()->stop = 1;
 }

@@ -6,32 +6,32 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:51 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/19 18:42:03 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 11:05:47 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-int	ft_pwd(void)
+int	ft_pwd(int fd)
 {
 	char	*buff;
 	int		size;
 
 	size = 1;
-	buff = malloc(sizeof(char) * size + 1);
+	buff = malloc(sizeof(char) * size);
 	if (!buff)
-		return (0);
+		return (-1);
 	getcwd(buff, size);
 	while (!buff[0])
 	{
 		free(buff);
 		size++;
-		buff = malloc(sizeof(char) * size + 1);
+		buff = malloc(sizeof(char) * size);
 		if (!buff)
-			return (0);
+			return (-1);
 		getcwd(buff, size);
 	}
-	printf("%s\n", buff);
+	ft_putstr_fd(buff, fd);
 	free(buff);
-	return (1);
+	return (0);
 }

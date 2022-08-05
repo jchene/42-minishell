@@ -3,23 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:32:58 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/13 18:13:45 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/03 14:40:19 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
 //Counts a specific flag in the pipe block
-int	count_block_flags(t_parsing *cursor, int flag)
+int	count_block_flags(t_parsing *tmp, int flag)
 {
 	int			ret;
-	t_parsing	*tmp;
 
 	ret = 0;
-	tmp = cursor;
 	if (tmp && tmp->flag == PIP)
 		tmp = tmp->next;
 	while (tmp && tmp->flag != PIP)

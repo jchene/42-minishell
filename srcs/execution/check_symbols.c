@@ -3,81 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   check_symbols.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:01:27 by jchene            #+#    #+#             */
-/*   Updated: 2022/07/12 14:18:23 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/03 02:30:54 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-int	next_bad_token(t_parsing *tmp, char *wrong_char, int ret)
+int	bad_next_token(t_parsing *tmp, char *wrong_char, int ret)
 {
 	if (tmp->next->flag == PIP)
-		fill_char(&wrong_char[0], '|', 0);
+		fill_char(wrong_char, '|', 0);
 	else if (tmp->next->flag == INF)
-		fill_char(&wrong_char[0], '<', 0);
+		fill_char(wrong_char, '<', 0);
 	else if (tmp->next->flag == ROF)
-		fill_char(&wrong_char[0], '>', 0);
+		fill_char(wrong_char, '>', 0);
 	else if (tmp->next->flag == HRD && !(wrong_char[0]))
 	{
-		fill_char(&wrong_char[0], '<', 1);
-		fill_char(&wrong_char[1], '<', 1);
+		fill_char(&wrong_char[0], '<', 0);
+		fill_char(&wrong_char[1], '<', 0);
 	}
 	else if (tmp->next->flag == AOF && !(wrong_char[0]))
 	{
-		fill_char(&wrong_char[0], '>', 1);
-		fill_char(&wrong_char[1], '>', 1);
+		fill_char(&wrong_char[0], '>', 0);
+		fill_char(&wrong_char[1], '>', 0);
 	}
 	return (ret);
 }
 
 int	check_simple_redir(t_parsing *tmp, char *wrong_char)
 {
-	int		i;
 	char	c;
 
-	i = 0;
 	c = itern((tmp->flag == INF), '<', '>');
-	while (ft_isdigit(tmp->str[i]))
-		i++;
-	if (tmp->str[i + 1])
+	if (tmp->str[1])
 	{
-		wrong_char[0] = tmp->str[i + 1];
-		if (tmp->str[i + 2] && tmp->str[i + 2] == tmp->str[i + 1])
-			wrong_char[1] = tmp->str[i + 2];
+		wrong_char[0] = tmp->str[1];
+		if (tmp->str[2] && tmp->str[2] == tmp->str[1])
+			wrong_char[1] = tmp->str[2];
 		return (INV);
 	}
 	if (!tmp->next)
-		return (fill_char(&wrong_char[0], '\n', INV));
+		return (fill_char(wrong_char, '\n', INV));
 	if (tmp->next->flag != FLN)
-		return (next_bad_token(tmp, &wrong_char[0], INV));
+		return (bad_next_token(tmp, wrong_char, INV));
 	return (itern((c == '<'), INF, ROF));
 }
 
 int	check_double_redir(t_parsing *tmp, char *wrong_char)
 {
-	int		i;
 	char	c;
 
-	i = 0;
 	c = itern((tmp->flag == HRD), '<', '>');
-	while (ft_isdigit(tmp->str[i]))
-		i++;
-	i++;
-	if (tmp->str[i + 1])
+	if (tmp->str[2])
 	{
-		wrong_char[0] = tmp->str[i + 1];
-		if (tmp->str[i + 2] && tmp->str[i + 2] == tmp->str[i + 1])
-			wrong_char[1] = tmp->str[i + 2];
+		wrong_char[0] = tmp->str[2];
+		if (tmp->str[3] && tmp->str[3] == tmp->str[2])
+			wrong_char[1] = tmp->str[3];
 		return (INV);
 	}
 	if (!tmp->next)
-		return (fill_char(&wrong_char[0], '\n', INV));
+		return (fill_char(wrong_char, '\n', INV));
 	if ((c == '<' && tmp->next->flag != HDL)
 		|| (c == '>' && tmp->next->flag != FLN))
-		return (next_bad_token(tmp, &wrong_char[0], INV));
+		return (bad_next_token(tmp, wrong_char, INV));
 	return (itern((c == '<'), HRD, AOF));
 }
 
@@ -86,11 +77,11 @@ int	check_pipe(t_parsing *tmp, char *wrong_char)
 	if (tmp->str[1])
 		return (fill_char(wrong_char, '|', INV));
 	if (!tmp->prev)
-		return (fill_char(&wrong_char[0], '|', INV));
+		return (fill_char(wrong_char, '|', INV));
 	if (!tmp->next)
-		return (fill_char(&wrong_char[0], '\n', INV));
-	if (tmp->next->flag == PIP)
-		return (fill_char(&wrong_char[0], '|', INV));
+		return (fill_char(wrong_char, '\n', INV));
+	if (tmp->next && tmp->next->flag == PIP)
+		return (fill_char(wrong_char, '|', INV));
 	return (PIP);
 }
 
