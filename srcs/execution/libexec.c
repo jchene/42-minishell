@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libexec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 09:34:06 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 15:18:47 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,8 @@ int	pipe_at_end(t_parsing *cursor)
 int	fd_update(int *fd_ptr, int value)
 {
 	if (*fd_ptr >= 0)
-	{
 		if (close(*fd_ptr) < 0)
 			return (iperror("minishell: close", 0));
-	}
 	*fd_ptr = value;
 	return (1);
 }

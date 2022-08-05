@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/05 01:46:14 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 02:17:13 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 16:25:59 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	free_exec(void)
 {
 	if (((data())->exec_struc->input != (data())->old_pipe[P_RD]
-		&& !fd_update(&(data())->exec_struc->input, -1))
+			&& !fd_update(&(data())->exec_struc->input, -1))
 		|| ((data())->exec_struc->output != (data())->new_pipe[P_WR]
 			&& !fd_update(&(data())->exec_struc->output, -1))
 		|| (!fd_update(&(data())->exec_struc->to_close[P_WR], -1)))

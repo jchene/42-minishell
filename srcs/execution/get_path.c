@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 06:13:00 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 16:21:37 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 		free(path);
 	}
 	free_ptabn((void **)dirs);
-	ft_putstr_fd("minishell: command not found:", 2);
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(string, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd(" command not found\n", 2);
 	return ((void *)1);
 }
 
@@ -74,18 +74,18 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	{
 		path = ft_strdup(string);
 		if (!path)
-			return ((void *)0);
+			return (NULL);
 		return (set_path(path, struc));
 	}
 	if (!access(string, F_OK))
 	{
 		path = ft_strdup(string);
 		if (!path)
-			return ((void *)0);
+			return (NULL);
 		return (set_path(path, struc));
 	}
 	dirs = ft_split(envp[get_env_index("PATH", envp)], ':');
 	if (!dirs)
-		return ((void *)0);
+		return (NULL);
 	return (try_path(string, struc, dirs, NULL));
 }

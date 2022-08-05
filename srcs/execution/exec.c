@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 11:02:01 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 16:50:17 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	child_process(t_exec *struc, char **envp)
 	if (!fd_update(&struc->out_pipe[P_RD], -1)
 		|| !fd_update(&struc->out_pipe[P_WR], -1))
 		return (exit_exec(0));
+	fprintf(stderr, "%s[%d]path: %s%s\n", RED_CODE, getpid(), struc->path, RESET_CODE);
 	if (is_builtin(struc->path))
 		return (exec_builtin(struc));
 	if (struc->path && !access(struc->path, F_OK))
@@ -44,15 +45,15 @@ int	launch_child(int i, char **envp)
 		(data())->child_ids[i] = -1;
 		return (1);
 	}
+	temp = is_builtin((data())->exec_struc->path);
+	if (temp)
+		apply_builtin((data())->exec_struc, temp, 0);
 	(data())->child_ids[i] = fork();
 	if ((data())->child_ids[i] < 0)
 		return (iperror("minishell: fork", 0));
 	if (!(data())->child_ids[i])
 		if (!child_process((data())->exec_struc, envp))
 			return (0);
-	temp = is_builtin((data())->exec_struc->path);
-	if (temp)
-		apply_builtin((data())->exec_struc, temp, 0);
 	return (1);
 }
 
@@ -61,6 +62,8 @@ int	fill_e_struc(t_exec *struc, char **envp)
 {
 	if (!get_args((data())->p_index, struc, envp))
 		return (0);
+	if ((data())->skip_exec)
+		return (1);
 	if (!get_infiles((data())->p_index, struc))
 		return (0);
 	if ((data())->skip_exec)
