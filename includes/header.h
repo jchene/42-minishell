@@ -62,6 +62,14 @@
 # define PIP		8	//	PIPE
 # define NWL		9	//	NEWLINE
 
+// BASH EXIT CODES
+
+# define GNRL_ERR	1	//	GENERAL ERROR
+# define SHELL_BT	2	//	SHELL BUILTIN MISUSE
+# define CMD_NO_X	126	//	COMMAND NOT EXECUTED
+# define CMD_NO_F	127	//	COMMAND NOT FOUND
+# define FATL_ERR	128	//	FATAL ERROR
+
 typedef struct s_export
 {
 	char				*str;

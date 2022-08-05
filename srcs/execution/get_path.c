@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 16:21:37 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 17:36:57 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 	free_ptabn((void **)dirs);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(string, 2);
-	ft_putstr_fd(" command not found\n", 2);
+	ft_putstr_fd(": command not found\n", 2);
+	(data())->exit_code = 127;
+	(data())->skip_exec = 1;
 	return ((void *)1);
 }
 
@@ -70,6 +72,7 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	char	**dirs;
 	char	*path;
 
+	fprintf(stderr, "%stesting: %s%s\n", RED_CODE, string, RESET_CODE);
 	if (is_builtin(string))
 	{
 		path = ft_strdup(string);
