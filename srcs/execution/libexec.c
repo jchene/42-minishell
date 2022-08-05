@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 15:18:47 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 19:25:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,18 @@ int	fd_update(int *fd_ptr, int value)
 			return (iperror("minishell: close", 0));
 	*fd_ptr = value;
 	return (1);
+}
+
+//Returns 1 if string is a directory, 0 otherwise
+int	is_directory(char *string)
+{
+	DIR		*dir;
+
+	dir = opendir(string);
+	if (dir)
+	{
+		closedir(dir);
+		return (1);
+	}
+	return (0);
 }

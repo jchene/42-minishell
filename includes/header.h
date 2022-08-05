@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <dirent.h>
 
 // ANSI COLOR CODES
 
@@ -69,6 +70,13 @@
 # define CMD_NO_X	126	//	COMMAND NOT EXECUTED
 # define CMD_NO_F	127	//	COMMAND NOT FOUND
 # define FATL_ERR	128	//	FATAL ERROR
+
+// MINISHELL ERROR CODES
+
+# define ER_CMD_PA	1	// BAD CMD PATH
+# define ER_CMD_FO	2	// BAD CMD
+# define ER_CMD_PE	3	// NO CMD PERMS
+# define ER_CMD_DI	4	// CMD IS DIRECTORY
 
 typedef struct s_export
 {
@@ -199,6 +207,9 @@ int				free_exec(void);
 int				exit_exec(int ret);
 void			apply_builtin(t_exec *struc, int ret, int is_last);
 int				exec_builtin(t_exec *struc);
+unsigned long	display_error(int err_code, char *name, int bash_code);
+const char		*get_err_str(int err_code);
+int				is_directory(char *string);
 
 //				HEREDOCS
 

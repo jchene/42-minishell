@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infiles.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 06:13:03 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 20:18:58 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,12 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 {
 	int	redir;
 
-	if (access(cursor->next->str, R_OK))
-	{
-		(data())->skip_exec = 1;
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cursor->next->str, 2);
-		return (iperror("", 1));
-	}
+	if (is_directory(cursor->next->str))
+		return (display_error(ER_CMD_DI, cursor->next->str, GNRL_ERR) + 1);
+	if (access(cursor->next->str, F_OK))
+		return (display_error(ER_CMD_PA, cursor->next->str, GNRL_ERR) + 1);
+	if (access(cursor->next->str, X_OK))
+		return (display_error(ER_CMD_PE, cursor->next->str, GNRL_ERR) + 1);
 	redir = open(cursor->next->str, O_RDONLY);
 	if (redir < 0)
 	{

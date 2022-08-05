@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 17:36:57 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/05 20:18:18 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,19 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 	{
 		tmp = ft_strjoin(dirs[i], "/");
 		if (!tmp && !free_ptabn((void **)dirs))
-			return ((void *)0);
+			return (NULL);
 		path = ft_strjoin(tmp, string);
 		free(tmp);
 		if (!path && !free_ptabn((void **)dirs))
-			return ((void *)0);
-		if (!access(path, F_OK) && !free_ptabn((void **)dirs))
+			return (NULL);
+		if (!access(path, X_OK) && !free_ptabn((void **)dirs))
 			return (set_path(path, struc));
+		if (!access(path, F_OK) && !free_ptabn((void **)dirs))
+			return ((void *)display_error(ER_CMD_PE, string, CMD_NO_X) + 1);
 		free(path);
 	}
 	free_ptabn((void **)dirs);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(string, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	(data())->exit_code = 127;
-	(data())->skip_exec = 1;
+	display_error(ER_CMD_FO, string, CMD_NO_F);
 	return ((void *)1);
 }
 
@@ -72,21 +70,24 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	char	**dirs;
 	char	*path;
 
-	fprintf(stderr, "%stesting: %s%s\n", RED_CODE, string, RESET_CODE);
+	path = ft_strdup(string);
+	if (!path)
+		return (NULL);
+	set_path(path, struc);
+	if (is_directory(string))
+		return ((void *)display_error(ER_CMD_DI, string, CMD_NO_X) + 1);
+	if (ft_ischarset(string, '/'))
+	{
+		if (!access(string, X_OK))
+			return ((void *)1);
+		if (!access(string, F_OK))
+			return ((void *)display_error(ER_CMD_PE, string, CMD_NO_X) + 1);
+		return ((void *)display_error(ER_CMD_PA, string, CMD_NO_F) + 1);
+	}
 	if (is_builtin(string))
-	{
-		path = ft_strdup(string);
-		if (!path)
-			return (NULL);
-		return (set_path(path, struc));
-	}
-	if (!access(string, F_OK))
-	{
-		path = ft_strdup(string);
-		if (!path)
-			return (NULL);
-		return (set_path(path, struc));
-	}
+		return ((void *)1);
+	free(path);
+	set_path(NULL, struc);
 	dirs = ft_split(envp[get_env_index("PATH", envp)], ':');
 	if (!dirs)
 		return (NULL);
