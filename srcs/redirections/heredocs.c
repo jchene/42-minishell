@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 15:55:29 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/06 15:39:05 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/06 18:30:57 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ t_parsing	*new_line(char *src)
 		return (NULL);
 	}
 	free((data())->line);
+	(data())->line = NULL;
 	return (dst);
 }
 
-int	get_new_line(int ret, char *line, int size)
+/*int	get_new_line(int ret, char *line, int size)
 {
 	int	exit_ret;
 
@@ -58,7 +59,6 @@ int	get_new_line(int ret, char *line, int size)
 	exit_ret = WEXITSTATUS(exit_ret);
 	while (ret > 0 && !exit_ret)
 	{
-		size *= 2;
 		line = malloc(sizeof(char) * size);
 		if (!line)
 			return (0);
@@ -69,11 +69,6 @@ int	get_new_line(int ret, char *line, int size)
 			free(line);
 	}
 	close((data())->temp_pipe[P_RD]);
-	if (ret)
-	{
-		fprintf(stderr, "NULL\n");
-		line = NULL;
-	}
 	if ((data())->line)
 		free((data())->line);
 	(data())->line = NULL;
@@ -83,11 +78,60 @@ int	get_new_line(int ret, char *line, int size)
 		free(line);
 	}
 	return (1);
+}*/
+
+int	get_new_line(int ret, char *line, int size)
+{
+	int		exit_ret;
+	int		tmp_fd;
+	char	tmp;
+
+	if (pipe((data())->temp_pipe) < 0)
+		return (0);
+	(data())->temp_pid = fork();
+	if ((data())->temp_pid < 0)
+		return (0);
+	if (!(data())->temp_pid)
+	{
+		close((data())->temp_pipe[P_RD]);
+		(data())->in_hrd = 1;
+		line = readline("> ");
+		fprintf(stderr, "read line1: %s\n", line);
+		write((data())->temp_pipe[P_WR], line, ft_strlen(line));
+		close((data())->temp_pipe[P_WR]);
+		if (line)
+			free(line);
+		exit(0);
+	}
+	close((data())->temp_pipe[P_WR]);
+	waitpid((data())->temp_pid, &exit_ret, 0);
+	exit_ret = WEXITSTATUS(exit_ret);
+	if (!exit_ret)
+	{
+		tmp_fd = dup((data())->temp_pipe[P_RD]);
+		while (ret && size++ && !exit_ret)
+			ret = read(tmp_fd, &tmp, 1);
+		fprintf(stderr, "size: %d\n", size);
+		line = ft_calloc(sizeof(char) * size);
+		if (!line)
+			return (0);
+		ret = read((data())->temp_pipe[P_RD], &line, size);
+		fprintf(stderr, "read line2: %s\n", line);
+		if (ret < 0)
+			return (0);
+		close(tmp_fd);
+		if ((data())->line)
+			free((data())->line);
+		(data())->line = ft_strdup(line);
+		free(line);
+	}
+	close((data())->temp_pipe[P_RD]);
+	return (1);
 }
 
 char	*get_lines(t_parsing *lines, t_parsing *index)
 {
-	if (!get_new_line(1, NULL, 0))
+	if (!get_new_line(1, NULL, 1))
 		return (NULL);
 	while ((data())->line && (!(data())->line[0]
 			|| !ft_strcmp((data())->p_index->next->str, (data())->line)))
@@ -98,7 +142,7 @@ char	*get_lines(t_parsing *lines, t_parsing *index)
 			if (!lines)
 				return (NULL);
 			index = lines;
-			if (!get_new_line(1, NULL, 0))
+			if (!get_new_line(1, NULL, 1))
 				return (NULL);
 			continue ;
 		}
@@ -106,7 +150,7 @@ char	*get_lines(t_parsing *lines, t_parsing *index)
 		if (!index->next && free_p_struct(&lines))
 			return (NULL);
 		index = index->next;
-		if (!get_new_line(1, NULL, 0))
+		if (!get_new_line(1, NULL, 1))
 			return (NULL);
 	}
 	return (end_of_hrd(lines));
@@ -116,7 +160,6 @@ int	new_heredoc(void)
 {
 	if (!(data())->he_start)
 	{
-		fprintf(stderr, "NO_HST\n");
 		(data())->he_start = malloc(sizeof(t_parsing));
 		if (!(data())->he_start)
 			return (0);

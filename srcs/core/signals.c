@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 21:49:34 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 15:10:51 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/06 17:16:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	ctrl_c(int sig)
 {
 	(void)sig;
+	write(1, "\n", 1);
 	if (!(data())->in_hrd)
 	{
-		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line ("", 0);
 		if (!(data())->passif_mode)
@@ -26,7 +26,6 @@ void	ctrl_c(int sig)
 	else if (!(data())->temp_pid)
 	{
 		close((data())->temp_pipe[P_WR]);
-		fprintf(stderr, "EXIT_ERROR\n");
 		exit(3);
 	}
 }

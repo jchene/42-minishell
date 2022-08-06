@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 11:52:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 15:25:39 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/06 17:23:51 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*strlcat_lines(t_parsing *lines, t_parsing *index, int i, int j)
 	i = 0;
 	while (lines)
 	{
+		fprintf(stderr, "line: %s\n", lines->str);
 		index = lines;
 		lines = lines->next;
 		j = -1;

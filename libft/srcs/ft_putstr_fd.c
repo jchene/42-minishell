@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 02:04:54 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 10:55:54 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:15:24 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_putstr_fd(char *s, int fd)
 	int	i;
 
 	i = -1;
-	while (s[++i])
+	while (s && s[++i])
 	{
 		if (write(fd, &s[i], 1) < 0)
 		{
