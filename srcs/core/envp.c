@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:31:33 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 10:03:15 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 14:09:22 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,23 @@ int	is_in_env(char *to_find)
 
 	i = -1;
 	while ((data())->envp[++i])
-		if (ft_strchr((data())->envp[i], to_find) != -1)
+		if (ft_strncmp((data())->envp[i], to_find, ft_strlen(to_find) + 1))
 			return (1);
 	return (0);
 }
 
-int	fill_new_envp(char **dst, char *new, int size)
+int	fill_new_envp(char **dst, int size)
 {
-	dst[size] = NULL;
-	dst[size - 1] = ft_strdup(new);
-	if (!dst[size - 1])
+	int	i;
+
+	i = -1;
+	while (++i < size - 1)
 	{
-		free(dst);
-		return (0);
-	}
-	(data())->i = size - 1;
-	while (--(data())->i >= 0)
-	{
-		dst[(data())->i] = ft_strdup((data())->old_envp[(data())->i]);
-		if (!dst[(data())->i])
+		dst[i] = ft_strdup((data())->old_envp[i]);
+		if (!dst[i])
 		{
-			while (dst[++(data())->i])
-				free(dst[(data())->i]);
+			while (dst[--i])
+				free(dst[i]);
 			free(dst);
 			return (0);
 		}
@@ -47,46 +42,44 @@ int	fill_new_envp(char **dst, char *new, int size)
 	return (1);
 }
 
-char	**add_to_envp(char **src, char *new, char **dst)
+char	**add_to_envp(char *new, char **dst)
 {
-	if (src)
+	dst = malloc(sizeof(char *) * ((data())->envp_size + 2));
+	if (!dst)
+		return (NULL);
+	dst[(data())->envp_size + 1] = NULL;
+	dst[(data())->envp_size] = ft_strdup(new);
+	if (!dst[(data())->envp_size])
 	{
-		(data())->i = -1;
-		while (src[++(data())->i])
-			continue ;
-		dst = malloc(sizeof(char *) * ((data())->i + 2));
-		if (!dst)
-			return (NULL);
-		if (!fill_new_envp(dst, new, (data())->i + 2))
-			return (NULL);
+		free(dst);
+		return (0);
 	}
-	else
-	{
-		dst = malloc(sizeof(char *) * 2);
-		if (!dst)
-			return (NULL);
-		dst[1] = NULL;
-		dst[0] = ft_strdup(new);
-		if (!dst[0])
-		{
-			free(dst);
-			return (NULL);
-		}
-	}
+	if (!fill_new_envp(dst, (data())->envp_size + 1))
+		return (NULL);
 	return (dst);
 }
 
 int	update_exp_struct(char *new)
 {
+	int		size;
+
+	if ((data())->temp)
+		free((data())->temp);
+	(data())->temp = ft_strndup(new, (data())->i, 0);
+	if (!(data())->temp)
+		return (0);
+	size = ft_strlen((data())->temp);
 	(data())->exp_index = (data())->exp_start;
 	while ((data())->exp_index)
 	{
-		if (ft_strchr((data())->exp_index->str, (data())->temp) != -1)
+		if (ft_strncmp((data())->exp_index->str, (data())->temp, size + 1)
+			&& (!(data())->exp_index->str[size]
+				|| (data())->exp_index->str[size] == '='))
 		{
 			free((data())->exp_index->str);
-			(data())->exp_index->str = ft_strdup(new);
+			(data())->exp_index->str = envp_to_export(new, 0);
 			if (!(data())->exp_index->str)
-				return (free_exp_struct());
+				return (0);
 			break ;
 		}
 		(data())->exp_index = (data())->exp_index->next;
@@ -103,8 +96,11 @@ int	update_env(char *new)
 	ret = 1;
 	while ((data())->envp[++i])
 	{
-		if (ft_strchr((data())->envp[i], (data())->temp) != -1)
+		if (ft_strncmp((data())->envp[i],
+				(data())->temp, ft_strlen((data())->temp) + 1))
 		{
+			free((data())->temp);
+			(data())->temp = NULL;
 			free((data())->envp[i]);
 			(data())->envp[i] = ft_strdup(new);
 			if (!(data())->envp[i])
@@ -114,6 +110,7 @@ int	update_env(char *new)
 		}
 	}
 	ret = update_exp_struct(new);
-	free((data())->temp);
+	if ((data())->temp)
+		free((data())->temp);
 	return (ret);
 }

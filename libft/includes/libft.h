@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 21:24:01 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/02 03:00:26 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 03:54:48 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char		**ft_split(char const *s, char c);
 int			ft_strchr(char *str, const char *to_find);
 char		*ft_strdup(const char *s);
 char		*ft_strjoin(const char *s1, const char *s2);
+int			ft_strcmp(char *str1, char *str2);
 size_t		ft_strlen(const char *s);
 int			ft_strncmp(char *src, char *to_find, int n);
 char		*ft_strndup(const char *s, int len, int start);

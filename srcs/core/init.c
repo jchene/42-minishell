@@ -3,43 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:05:27 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:21:24 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 14:07:51 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-int	new_envp(void)
+char	*hide_that(void)
 {
-	(data())->envp = malloc(sizeof(char *) * 4);
-	if (!(data())->envp)
-		return (0);
-	(data())->envp[0] = ft_strdup("PWD=/home/gekyume/minishell");
-	(data())->envp[1] = ft_strdup("SHLVL=1");
-	(data())->envp[2] = ft_strdup("_=/usr/bin/env");
-	(data())->envp[3] = NULL;
-	(data())->envp_size = 3;
-	return (1);
+	char	*str;
+
+	str = ft_strdup("OLDPWD");
+	if (!str)
+		return (NULL);
+	return (str);
 }
 
-int	create_envp(char **envp)
+char	*envp_to_export(char *s, int founded)
 {
-	if (envp && envp[0])
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	char	*str;
+
+	i = 0;
+	if (s[0] == '_' && s[1] == '=')
+		return (hide_that());
+	while (s[i])
+		i++;
+	str = malloc(sizeof(char) * (i + 2) + 1);
+	if (!str)
+		return (NULL);
+	j = -1;
+	k = -1;
+	while (i--)
 	{
-		(data())->envp = cp_str_tab2(envp);
-		if (!(data())->envp)
-			return (0);
-		(data())->i = 0;
-		while ((data())->envp[(data())->i])
-			(data())->i++;
-		(data())->envp_size = (data())->i;
+		str[++j] = s[++k];
+		if (s[k] == '=' && !founded && ++founded)
+			str[++j] = D_QUOTE;
 	}
-	else if (!new_envp())
-			return (0);
-	return (1);
+	if (founded)
+		str[++j] = D_QUOTE;
+	str[++j] = '\0';
+	return (str);
 }
 
 int	init_data(char **envp)
@@ -58,6 +67,9 @@ int	init_data(char **envp)
 	(data())->he_start = NULL;
 	(data())->he_read = 0;
 	(data())->lines_executed = 1;
+	(data())->in_child = 0;
+	(data())->passif_mode = 0;
+	(data())->in_hrd = 0;
 	if (!create_envp(envp))
 		return (0);
 	return (1);

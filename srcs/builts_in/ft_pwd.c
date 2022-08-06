@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:51 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:05:47 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/05 22:42:58 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ int	ft_pwd(int fd)
 	buff = malloc(sizeof(char) * size);
 	if (!buff)
 		return (-1);
-	getcwd(buff, size);
-	while (!buff[0])
+	while (!getcwd(buff, size))
 	{
 		free(buff);
 		size++;
 		buff = malloc(sizeof(char) * size);
 		if (!buff)
 			return (-1);
-		getcwd(buff, size);
 	}
 	ft_putstr_fd(buff, fd);
+	ft_putstr_fd("\n", fd);
 	free(buff);
 	return (0);
 }

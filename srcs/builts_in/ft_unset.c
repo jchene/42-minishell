@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:06:13 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 14:06:04 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,17 @@ int	check_valid_name(char *name)
 	return (1);
 }
 
-void	remove_from_exp(char *name)
+int	remove_from_exp(char *name)
 {
+	int		size;
+
+	size = ft_strlen(name);
 	(data())->exp_index = (data())->exp_start;
 	while ((data())->exp_index)
 	{
-		if (ft_strchr((data())->exp_index->str, name) != -1)
+		if (ft_strncmp((data())->exp_index->str, name, size + 1)
+			&& (!(data())->exp_index->str[size]
+				|| (data())->exp_index->str[size] == '='))
 		{
 			(data())->exp_index->next->prev = (data())->exp_index->prev;
 			(data())->exp_index->prev->next = (data())->exp_index->next;
@@ -72,26 +77,31 @@ void	remove_from_exp(char *name)
 		}
 		(data())->exp_index = (data())->exp_index->next;
 	}
+	return (1);
 }
 
 int	ft_unset(char **name)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
-	while (name && name[0] && name[++i])
-	{	
+	while (name[++i])
+	{
 		if (!check_valid_name(name[i]))
+			return (1);
+		temp = ft_strjoin(name[i], "=");
+		if (!temp)
 			return (-1);
-		if ((data())->envp && is_in_env(name[i]))
-		{
-			(data())->i = -1;
-			while ((data())->envp[++(data())->i])
-				if (ft_strchr((data())->envp[(data())->i], name[i]) != -1)
-					if (!remove_from_envp((data())->i))
-						return (-1);
-		}
-		remove_from_exp(name[i]);
+		(data())->i = -1;
+		while ((data())->envp[++(data())->i])
+			if (ft_strncmp((data())->envp[(data())->i],
+					temp, ft_strlen(temp) + 1))
+				if (!remove_from_envp((data())->i))
+					return (ifree((void *)temp, 0));
+		free(temp);
+		if (!remove_from_exp(name[i]))
+			return (-1);
 	}
 	return (0);
 }

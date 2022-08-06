@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollars.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 18:44:23 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 05:54:10 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:39:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,14 @@ int	convert_it(int size, int k, int finded)
 	int		ret;
 
 	old = NULL;
-	buff = NULL;
+	buff = ft_strjoin((data())->temp, "=");
+	if (!buff)
+		return (0);
 	while (!finded && (data())->envp[++k])
-		if (ft_strncmp((data())->envp[k], (data())->temp, size))
+		if (ft_strncmp((data())->envp[k], buff, size + 2))
 			finded = 1;
+	free(buff);
+	buff = NULL;
 	if (finded)
 	{
 		free((data())->temp);
@@ -86,6 +90,14 @@ int	convert_it(int size, int k, int finded)
 
 int	dollar_finded(void)
 {
+	if (ft_strcmp((data())->p_index->str, "$?"))
+	{
+		free((data())->p_index->str);
+		(data())->p_index->str = ft_itoa((data())->exit_code);
+		if (!(data())->p_index->str)
+			return (0);
+		return (1);
+	}
 	while ((data())->p_index->str[(data())->j])
 	{
 		(data())->j++;
@@ -97,14 +109,6 @@ int	dollar_finded(void)
 					(data())->j - (data())->i - 1, (data())->i + 1);
 			if (!(data())->temp)
 				return (0);
-			if (ft_strncmp((data())->temp, "?", 1))
-			{
-				free((data())->temp);
-				free((data())->p_index->str);
-				(data())->p_index->str = ft_itoa((data())->exit_code);
-				if (!(data())->p_index->str)
-					return (0);
-			}
 			return (convert_it(ft_strlen((data())->temp), -1, 0));
 		}
 	}
@@ -131,8 +135,8 @@ int	rm_dollars(t_parsing *start, t_parsing *temp, int from_hrd)
 		(data())->i = -1;
 		while ((data())->p_index->str[++(data())->i])
 			if ((data())->p_index->str[(data())->i] == '$'
-					&& set_int(&(data())->j, (data())->i, 1)
-					&& (!from_hrd && is_quoted(((data())->j), 0)))
+				&& set_int(&(data())->j, (data())->i, 1)
+				&& (from_hrd || (!from_hrd && !is_quoted(((data())->j), 0))))
 				if (!dollar_finded())
 					return (0);
 		(data())->p_index = (data())->p_index->next;

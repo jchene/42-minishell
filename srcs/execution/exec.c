@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 19:38:41 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/06 12:44:50 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	child_process(t_exec *struc, char **envp)
 {
+	(data())->in_child++;
 	if (struc->input >= 0)
 		if (dup2(struc->input, STDIN_FILENO) < 0)
 			return (exit_exec(iperror("minishell: dup2", 0)));

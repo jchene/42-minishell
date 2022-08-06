@@ -43,8 +43,10 @@ int	new_prompt(void)
 		return (0);
 	if (!start_exec((data())->envp))
 		return (0);
+	(data())->passif_mode = 1;
 	if (!wait_all())
 		return (0);
+	(data())->passif_mode = 0;
 	return (end_of_prompt());
 }
 

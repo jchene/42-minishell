@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 17:33:05 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/03 14:54:39 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 13:54:29 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
+//Returns name of flag for lexing
 const char	*flag_name(int flag)
 {
 	if (flag == INF)
@@ -39,19 +40,18 @@ const char	*flag_name(int flag)
 	return (NULL);
 }
 
+//Display leking word list
 void	display_list(void)
 {
 	(data())->p_index = (data())->p_start;
 	while ((data())->p_index)
 	{
 		if ((data())->p_index->flag == INV)
-			fprintf(stderr, "%s*%s* - %s%s\n", RED_CODE,
-				(data())->p_index->str, flag_name((data())->p_index->flag),
-				RESET_CODE);
+			printf("%s*%s* - %s%s\n", RED_CODE, (data())->p_index->str,
+				flag_name((data())->p_index->flag), RESET_CODE);
 		else
-			fprintf(stderr, "%s*%s* - %s%s\n", GREEN_CODE,
-				(data())->p_index->str, flag_name((data())->p_index->flag),
-				RESET_CODE);
+			printf("%s*%s* - %s%s\n", GREEN_CODE, (data())->p_index->str,
+				flag_name((data())->p_index->flag), RESET_CODE);
 		(data())->p_index = (data())->p_index->next;
 	}
 }

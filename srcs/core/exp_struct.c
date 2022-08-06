@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:43:29 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/03 19:29:53 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 06:52:30 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 
 int	add_to_exp_struct(char *str)
 {
-	if (!(data())->exp_start->str)
-	{
-		(data())->exp_start->str = ft_strdup(str);
-		if (!(data())->exp_start->str)
-			return (0);
-		return (1);
-	}
 	(data())->exp_index = (data())->exp_start;
 	while ((data())->exp_index->next)
 		(data())->exp_index = (data())->exp_index->next;
@@ -30,7 +23,7 @@ int	add_to_exp_struct(char *str)
 	(data())->exp_index->next->next = NULL;
 	(data())->exp_index->next->prev = (data())->exp_index;
 	(data())->exp_end = (data())->exp_index->next;
-	(data())->exp_index->next->str = ft_strdup(str);
+	(data())->exp_index->next->str = envp_to_export(str, 0);
 	if (!(data())->exp_index->next->str)
 		return (0);
 	return (1);
@@ -97,7 +90,8 @@ int	init_exp_struct(void)
 	(data())->exp_index->str = NULL;
 	if ((data())->envp[0])
 	{
-		(data())->exp_index->str = ft_strdup((data())->envp[0]);
+		(data())->exp_index->str
+			= envp_to_export((data())->envp[0], 0);
 		if (!(data())->exp_index->str)
 			return (0);
 	}
@@ -121,7 +115,7 @@ int	create_exp_struct(void)
 		(data())->exp_index->next->prev = (data())->exp_index;
 		(data())->exp_index->next->next = NULL;
 		(data())->exp_index->next->str
-			= ft_strdup((data())->envp[(data())->i]);
+			= envp_to_export((data())->envp[(data())->i], 0);
 		if (!(data())->exp_index->next->str)
 			return (0);
 		(data())->exp_index = (data())->exp_index->next;

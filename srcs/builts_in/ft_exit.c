@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:47 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:05:44 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 04:11:02 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 void	ft_exit(void)
 {
-	if (ft_strncmp((data())->p_start->str, "exit", 4))
+	if (ft_strcmp((data())->p_start->str, "exit"))
 		data()->stop = 1;
 }

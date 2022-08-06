@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end_of_hrd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 11:52:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/04 20:58:00 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:25:39 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 char	*return_str(char *str, int i)
 {
-	if (!i)
-		str[i] = '\0';
-	else
-		str[i - 1] = '\0';
+	str[i - 1] = '\0';
 	return (str);
 }
 
@@ -46,7 +43,7 @@ char	*strlcat_lines(t_parsing *lines, t_parsing *index, int i, int j)
 		free(index->str);
 		free(index);
 	}
-	return (return_str(str, i));
+	return (return_str(str, i + 1));
 }
 
 char	*end_of_hrd(t_parsing *lines)
@@ -59,7 +56,11 @@ char	*end_of_hrd(t_parsing *lines)
 		ft_putstr_fd((data())->p_index->next->str, 2);
 		ft_putstr_fd("')\n", 2);
 	}
-	free((data())->line);
+	else
+	{
+		free((data())->line);
+		(data())->line = NULL;
+	}
 	if (!lines)
 		return (strlcat_lines(lines, lines, 1, 0));
 	return (strlcat_lines(lines, lines, 0, 0));

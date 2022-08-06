@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/18 01:22:01 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/06 17:28:21 by jchene           ###   ########.fr       */
+/*   Created: 2022/08/06 03:54:13 by anguinau          #+#    #+#             */
+/*   Updated: 2022/08/06 13:55:17 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-// Malloc & return une copie de S
-char	*ft_strdup(const char *s)
+// Return 1 si str1 = str2, sinon 0
+int	ft_strcmp(char *str1, char *str2)
 {
-	size_t	i;
-	size_t	j;
-	size_t	k;
-	char	*str;
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i])
+	while (str1[i] && str2[i])
+	{
+		if (str1[i] != str2[i])
+			return (0);
 		i++;
-	str = malloc(i + 1);
-	if (!str)
-		return (NULL);
-	j = -1;
-	k = -1;
-	while (i--)
-		str[++j] = s[++k];
-	str[++j] = s[++k];
-	return (str);
+	}
+	if (str1[i] || str2[i])
+		return (0);
+	return (1);
 }

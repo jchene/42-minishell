@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 09:34:26 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/04 14:11:36 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:39:45 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	new_p_struct_member(void)
 			return (0);
 		(data())->p_start->prev = NULL;
 		(data())->p_start->next = NULL;
+		(data())->p_start->flag = -1;
+		(data())->p_start->was_quoted = 0;
 		(data())->p_index = (data())->p_start;
 	}
 	else

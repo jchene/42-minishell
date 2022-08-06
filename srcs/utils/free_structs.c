@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:39:17 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/03 19:42:03 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:32:43 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	free_p_struct(t_parsing **start)
 	{
 		temp = *start;
 		*start = (*start)->next;
-		free(temp->str);
+		if (temp->str)
+			free(temp->str);
 		free(temp);
 	}
 	*start = NULL;

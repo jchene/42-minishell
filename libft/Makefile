@@ -6,7 +6,7 @@
 #    By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/26 00:39:01 by anguinau          #+#    #+#              #
-#    Updated: 2022/08/01 18:30:04 by anguinau         ###   ########.fr        #
+#    Updated: 2022/08/06 11:38:58 by anguinau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME			=	libft.a
 SRCSDIR			=	srcs
 INCLUDESDIR		=	includes
 OBJSDIR			=	objs
-CFLAGS			=	-Wall -Wextra -Werror #-fsanitize=address
+CFLAGS			=	-Wall -Wextra -Werror -g #-fsanitize=address
 CC				=	gcc
 RM				=	rm -rf
 

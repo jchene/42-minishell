@@ -3,46 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:20 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:07:43 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 14:05:53 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-int	get_home(char **str)
+char	*get_home(void)
 {
 	int		i;
+	char	*s;
 
 	i = -1;
-	while ((data())->envp && (data())->envp[++i])
+	s = NULL;
+	while ((data())->envp[++i])
 	{
-		if (ft_strchr((data())->envp[i], "HOME") != -1)
+		if (ft_strncmp((data())->envp[i], "HOME=", 6))
 		{
-			*str = ft_strndup((data())->envp[i],
-					ft_strlen((data())->envp[i] - 5), 5);
-			if (!*str)
-				return (0);
+			s = ft_strndup((data())->envp[i], ft_strlen((data())->envp[i]), 5);
+			if (!s)
+				return (NULL);
 		}
 	}
-	if (!*str)
+	if (!s)
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+	return (s);
+}
+
+char	*get_current_dir(char *buff, int size)
+{
+	buff = malloc(sizeof(char) * size);
+	if (!buff)
+		return (NULL);
+	while (!getcwd(buff, size))
+	{
+		free(buff);
+		size++;
+		buff = malloc(sizeof(char) * size);
+		if (!buff)
+			return (NULL);
+	}
+	return (buff);
+}
+
+int	update_pwd(int i, char *cd)
+{
+	char	**str;
+
+	str = malloc(sizeof(char *) * 4);
+	if (!str)
+		return (0);
+	str[3] = NULL;
+	str[2] = NULL;
+	str[0] = NULL;
+	while ((data())->envp[++i])
+	{
+		if (ft_strncmp((data())->envp[i], "PWD=", 5))
+		{
+			str[1] = ft_strjoin("OLD", (data())->envp[i]);
+			if (!str[1])
+				return (free_ptab((void **)str, 4));
+			cd = get_current_dir(NULL, 1);
+			str[2] = ft_strjoin("PWD=", cd);
+			if (!str[2])
+				return (free_ptab((void **)str, 4));
+			if (ft_export(str, 2))
+				return (free_ptab((void **)str, 4));
+		}
+	}
+	free_ptab((void **)str, 4);
 	return (1);
 }
 
-int	ft_cd(char **dir)
+int	ft_cd(char **dir, char *str)
 {
-	char	*str;
-
-	if ((dir[2]) && ft_putstr_fd("bash: cd: too many arguments", 2) >= 0)
+	if (dir[1] && dir[2]
+		&& ft_putstr_fd("bash: cd: too many arguments\n", 2) >= 0)
 		return (1);
 	if (!dir[1] || (dir[1] && !dir[1][0]))
 	{
-		str = NULL;
-		if (!get_home(&str))
-			return (-1);
+		str = get_home();
 		if (!str)
 			return (1);
 		if (chdir(str))
@@ -52,11 +95,12 @@ int	ft_cd(char **dir)
 			return (1);
 		}
 		free(str);
+		return (update_pwd(-1, NULL));
 	}
-	else if (chdir(dir[1]))
+	if (chdir(dir[1]))
 	{
 		perror("minishell: cd");
 		return (1);
 	}
-	return (0);
+	return (update_pwd(-1, NULL));
 }

@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:42 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 11:18:01 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 03:56:21 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_echo(char **str, int fd)
 	n = 0;
 	while (str[++h])
 	{
-		if (ft_strncmp(str[h], "-n", 2) && ++n)
+		if (h == 1 && ft_strcmp(str[h], "-n") && ++n)
 			continue ;
 		i = -1;
 		while (str[h][++i])

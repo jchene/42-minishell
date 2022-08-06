@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 17:24:42 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/01 22:14:39 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 06:29:57 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	free_ptab(void **tab, size_t size)
 
 	i = -1;
 	while (++i < size)
-		free((tab)[i]);
+		if ((tab)[i])
+			free((tab)[i]);
 	free(tab);
 	return (0);
 }

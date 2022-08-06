@@ -124,6 +124,9 @@ typedef struct s_data
 	t_parsing	*he_start;
 	t_parsing	*he_index;
 	t_exec		*exec_struc;
+	int			shlvl;
+	int			in_hrd;
+	int			passif_mode;
 	int			envp_size;
 	char		**old_envp;
 	char		**envp;
@@ -138,6 +141,9 @@ typedef struct s_data
 	int			he_pipe[2];
 	int			old_pipe[2];
 	int			new_pipe[2];
+	int			temp_pipe[2];
+	pid_t		temp_pid;
+	int			in_child;
 	int			skip_exec;
 	int			last_skip;
 	char		*temp;
@@ -147,13 +153,14 @@ typedef struct s_data
 
 //				ENV MANAGEMENT
 
-char			**add_to_envp(char **src, char *new, char **dst);
+int				create_envp(char **envp);
+char			**add_to_envp(char *new, char **dst);
 int				update_env(char *new);
 int				create_exp_struct(void);
 int				add_to_exp_struct(char *str);
 int				free_exp_struct(void);
 int				is_in_env(char *to_find);
-int				envp_will_change(char *str);
+char			*envp_to_export(char *s, int founded);
 
 //				INIT
 
@@ -235,7 +242,7 @@ int				count_list_flags(int flag);
 int				ft_pwd(int fd);
 void			ft_exit(void);
 int				ft_echo(char **str, int fd);
-int				ft_cd(char **dir);
+int				ft_cd(char **dir, char *str);
 int				ft_export(char **str, int fd);
 int				ft_env(int fd);
 int				ft_unset(char **name);

@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 15:06:31 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/15 03:10:24 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/06 04:26:24 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*ft_strjoin(const char *s1, const char *s2)
 
 	i = 0;
 	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
 	while (s1[i])
 		i++;
 	while (s2[j])
