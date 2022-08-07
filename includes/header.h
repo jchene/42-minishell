@@ -112,6 +112,12 @@ typedef struct s_exec
 	char				**args;
 }						t_exec;
 
+typedef struct s_word
+{
+	char				letter;
+	struct s_word		next;
+}						t_word;
+
 typedef struct s_data
 {
 	t_export	*exp_index;
