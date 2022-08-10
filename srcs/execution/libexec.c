@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/06 09:38:50 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/10 14:27:18 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //Returns number of commands in pipeline. Use flags UP or NO_UP to update or not
 int	nb_cmds(int flag)
 {
-	static int	ret = -1;
+	static int	ret = 0;
 	t_parsing	*tmp;
 
 	if (flag)
@@ -41,12 +41,13 @@ int	wait_all(void)
 	int	temp;
 
 	i = -1;
+	temp = 0;
 	while (++i < nb_cmds(NO_UP))
 		if ((data())->child_ids[i] != -1)
 			if (waitpid((data())->child_ids[i], &temp, 0) < 0)
 				return (iperror("minishell: waitpid", 0));
-	if (!(data())->got_from_builtsin)
-		(data())->exit_code = WEXITSTATUS((data())->exit_code);
+	if (!(data())->got_from_builtsin && !(data())->skip_exec)
+		(data())->exit_code = WEXITSTATUS(temp);
 	return (1);
 }
 

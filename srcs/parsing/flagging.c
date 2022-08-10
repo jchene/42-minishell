@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 14:27:28 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/05 06:09:01 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/09 17:18:35 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	check_invalids(char *wrong_char)
 			else
 				ft_putstr_fd(wrong_char, 2);
 			ft_putstr_fd("'\n", 2);
+			(data())->exit_code = 2;
 			return (0);
 		}
 		tmp = tmp->next;

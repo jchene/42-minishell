@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/06 09:39:39 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/10 14:30:19 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 		return (display_error(ER_CMD_DI, cursor->next->str, GNRL_ERR) + 1);
 	if (access(cursor->next->str, F_OK))
 		return (display_error(ER_CMD_PA, cursor->next->str, GNRL_ERR) + 1);
-	if (access(cursor->next->str, X_OK))
+	if (access(cursor->next->str, R_OK))
 		return (display_error(ER_CMD_PE, cursor->next->str, GNRL_ERR) + 1);
 	redir = open(cursor->next->str, O_RDONLY);
 	if (redir < 0)
@@ -41,6 +41,10 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 	}
 	if (struc->input == (data())->old_pipe[P_RD])
 	{
+		if ((data())->old_pipe[P_RD] == (data())->new_pipe[P_RD])
+			(data())->new_pipe[P_RD] = -1;
+		if ((data())->old_pipe[P_WR] == (data())->new_pipe[P_WR])
+			(data())->new_pipe[P_WR] = -1;
 		(data())->old_pipe[P_RD] = -1;
 		(data())->old_pipe[P_WR] = -1;
 	}
@@ -56,6 +60,11 @@ int	fill_heredoc(t_exec *struc, t_parsing *htmp, int i)
 	if (!fd_update(&(data())->he_pipe[P_RD], -1)
 		|| !fd_update(&(data())->he_pipe[P_WR], -1))
 		return (0);
+	if ((data())->he_read)
+	{
+		struc->to_close[P_WR] = -1;
+		struc->input = -1;
+	}
 	if (pipe((data())->he_pipe) < 0)
 		return (iperror("minishell: pipe failed", 0));
 	htmp = (data())->he_start;
@@ -66,14 +75,16 @@ int	fill_heredoc(t_exec *struc, t_parsing *htmp, int i)
 		return (0);
 	if (struc->input == (data())->old_pipe[P_RD])
 	{
+		if ((data())->old_pipe[P_RD] == (data())->new_pipe[P_RD])
+			(data())->new_pipe[P_RD] = -1;
+		if ((data())->old_pipe[P_WR] == (data())->new_pipe[P_WR])
+			(data())->new_pipe[P_WR] = -1;
 		(data())->old_pipe[P_RD] = -1;
 		(data())->old_pipe[P_WR] = -1;
 	}
 	if (!fd_update(&(struc->to_close[P_WR]), (data())->he_pipe[P_WR])
 		|| !fd_update(&(struc->input), (data())->he_pipe[P_RD]))
 		return (0);
-	(data())->he_pipe[P_WR] = -1;
-	(data())->he_pipe[P_RD] = -1;
 	return (1);
 }
 

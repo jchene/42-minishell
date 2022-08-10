@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 22:45:44 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:07:32 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/10 06:14:23 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ int	exec_builtin(t_exec *struc)
 	(data())->old_pipe[P_WR] = -1;
 	(data())->new_pipe[P_RD] = -1;
 	(data())->new_pipe[P_WR] = -1;
-	exit(exit_exec((data())->exit_code));
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	exit_exec(1);
+	exit(exit_properly((data())->exit_code));
 	return (1);
 }
 

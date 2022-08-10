@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:05:27 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:07:51 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/10 14:49:04 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	init_data(char **envp)
 	(data())->exit_code = 0;
 	(data())->got_from_builtsin = 0;
 	(data())->line = NULL;
+	(data())->lines = NULL;
 	(data())->envp = NULL;
 	(data())->envp_size = 0;
 	(data())->h_start = NULL;
@@ -70,6 +71,8 @@ int	init_data(char **envp)
 	(data())->in_child = 0;
 	(data())->passif_mode = 0;
 	(data())->in_hrd = 0;
+	(data())->temp_pid = -1;
+	(data())->child_ids = NULL;
 	if (!create_envp(envp))
 		return (0);
 	return (1);

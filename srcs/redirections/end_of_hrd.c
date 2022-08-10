@@ -3,52 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   end_of_hrd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 11:52:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 17:23:51 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/10 12:39:58 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
-char	*return_str(char *str, int i)
+void	join_lines(t_parsing *index, int i, int j, char **str)
 {
-	str[i - 1] = '\0';
+	while ((data())->lines)
+	{
+		index = (data())->lines;
+		(data())->lines = (data())->lines->next;
+		j = -1;
+		if (index->str)
+		{
+			while (index->str[++j])
+				(*str)[i + j] = index->str[j];
+			if ((*str)[i + j - 1] != '\n')
+			{
+				(*str)[i + j] = '\n';
+				i += j + 1;
+			}
+			else
+				i += j;
+			free(index->str);
+		}
+		free(index);
+	}
+	(*str)[i] = '\0';
+}
+
+char	*strlcat_lines(t_parsing *index, int i, char *str)
+{
+	while (index)
+	{
+		if (index->str[0] == '\n')
+			i++;
+		else
+			i += ft_strlen(index->str) + 1;
+		index = index->next;
+	}
+	str = malloc(sizeof(char) * i + 1);
+	if (!str && free_p_struct(&(data())->lines))
+		return (NULL);
+	join_lines(NULL, 0, 0, &str);
 	return (str);
 }
 
-char	*strlcat_lines(t_parsing *lines, t_parsing *index, int i, int j)
+int	end_of_hrd(char **str, int ret)
 {
-	char	*str;
-
-	while (index)
+	if ((!ret || ret == -1) && free_p_struct(&(data())->lines))
 	{
-		i += ft_strlen(index->str) + 1;
-		index = index->next;
+		if ((data())->line)
+			free((data())->line);
+		(data())->line = NULL;
+		return (ret);
 	}
-	str = malloc(sizeof(char) * (i - 1) + 1);
-	if (!str && free_p_struct(&lines))
-		return (NULL);
-	i = 0;
-	while (lines)
-	{
-		fprintf(stderr, "line: %s\n", lines->str);
-		index = lines;
-		lines = lines->next;
-		j = -1;
-		while (index->str[++j])
-			str[i + j] = index->str[j];
-		str[i + j] = '\n';
-		i += j + 1;
-		free(index->str);
-		free(index);
-	}
-	return (return_str(str, i + 1));
-}
-
-char	*end_of_hrd(t_parsing *lines)
-{
 	if (!(data())->line)
 	{
 		ft_putstr_fd("minishell: warning: here-document at line ", 2);
@@ -58,11 +72,8 @@ char	*end_of_hrd(t_parsing *lines)
 		ft_putstr_fd("')\n", 2);
 	}
 	else
-	{
 		free((data())->line);
-		(data())->line = NULL;
-	}
-	if (!lines)
-		return (strlcat_lines(lines, lines, 1, 0));
-	return (strlcat_lines(lines, lines, 0, 0));
+	(data())->line = NULL;
+	*str = strlcat_lines((data())->lines, 0, NULL);
+	return (ret);
 }

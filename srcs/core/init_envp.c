@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 03:01:09 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:09:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/08 21:44:01 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ int	new_envp(void)
 	(data())->envp[2] = ft_strdup("_=./minishell");
 	(data())->envp[3] = NULL;
 	(data())->envp_size = 3;
+	return (1);
+}
+
+int	return_upgrade(void)
+{
+	int	j;
+
+	if (!(data())->envp[(data())->i])
+	{
+		j = (data())->i - 1;
+		while (--j)
+			free((data())->envp[j]);
+		while ((data())->envp[++(data())->i])
+			free((data())->envp[(data())->i]);
+		free((data())->envp);
+		(data())->envp = NULL;
+		return (0);
+	}
 	return (1);
 }
 
@@ -43,18 +61,7 @@ int	upgrade_shlvl(int i, int j, int lvl, char *temp)
 		return (0);
 	(data())->envp[(data())->i] = ft_strjoin("SHLVL=", temp);
 	free(temp);
-	if (!(data())->envp[(data())->i])
-	{
-		j = (data())->i - 1;
-		while (--j)
-			free((data())->envp[j]);
-		while ((data())->envp[++(data())->i])
-			free((data())->envp[(data())->i]);
-		free((data())->envp);
-		(data())->envp = NULL;
-		return (0);
-	}
-	return (1);
+	return (return_upgrade());
 }
 
 int	create_envp(char **envp)

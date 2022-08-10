@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/06 12:44:50 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/10 14:49:06 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,43 @@ int	child_process(t_exec *struc, char **envp)
 {
 	(data())->in_child++;
 	if (struc->input >= 0)
-		if (dup2(struc->input, STDIN_FILENO) < 0)
-			return (exit_exec(iperror("minishell: dup2", 0)));
+		if (dup2(struc->input, STDIN_FILENO) < 0 && exit_exec(1))
+			exit(exit_properly((data())->exit_code));
 	if (struc->output >= 0)
-		if (dup2(struc->output, STDOUT_FILENO) < 0)
-			return (exit_exec(iperror("minishell: dup2", 0)));
-	if (!fd_update(&struc->to_close[P_RD], -1)
-		|| !fd_update(&struc->to_close[P_WR], -1))
-		return (exit_exec(0));
-	if (!fd_update(&struc->out_pipe[P_RD], -1)
-		|| !fd_update(&struc->out_pipe[P_WR], -1))
-		return (exit_exec(0));
+		if (dup2(struc->output, STDOUT_FILENO) < 0 && exit_exec(1))
+			exit(exit_properly((data())->exit_code));
+	if ((!fd_update(&struc->to_close[P_RD], -1)
+		|| !fd_update(&struc->to_close[P_WR], -1)) && exit_exec(1))
+		exit(exit_properly((data())->exit_code));
+	if ((!fd_update(&struc->out_pipe[P_RD], -1)
+		|| !fd_update(&struc->out_pipe[P_WR], -1)) && exit_exec(1))
+		exit(exit_properly((data())->exit_code));
 	if (is_builtin(struc->path))
 		return (exec_builtin(struc));
 	if (execve(struc->path, struc->args, envp) < 0)
-		perror("minishell: execve");
-	exit(exit_exec(1));
-	return (1);
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(struc->path, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
+	}
+	exit_exec(0);
+	exit(exit_properly(1));
+	return (0);
 }
 
 int	launch_child(int i, char **envp)
 {
-	int	temp;
+	int	ret;
 
 	if ((data())->skip_exec)
 	{
 		(data())->child_ids[i] = -1;
 		return (1);
 	}
-	temp = is_builtin((data())->exec_struc->path);
-	if (temp)
-		apply_builtin((data())->exec_struc, temp, 0);
+	ret = is_builtin((data())->exec_struc->path);
+	if (ret)
+		apply_builtin((data())->exec_struc, ret, 0);
 	(data())->child_ids[i] = fork();
 	if ((data())->child_ids[i] < 0)
 		return (iperror("minishell: fork", 0));
@@ -56,25 +62,30 @@ int	launch_child(int i, char **envp)
 	return (1);
 }
 
+int	next_word(void)
+{
+	if ((data())->p_index->flag == PIP)
+		(data())->p_index = (data())->p_index->next;
+	while ((data())->p_index && (data())->p_index->flag != PIP)
+		(data())->p_index = (data())->p_index->next;
+	return (1);
+}
+
 //Fill struc with data, at start of function, cursor is on first word of block
 int	fill_e_struc(t_exec *struc, char **envp)
 {
 	if (!get_args((data())->p_index, struc, envp))
 		return (0);
 	if ((data())->skip_exec)
-		return (1);
+		return (next_word());
 	if (!get_infiles((data())->p_index, struc))
 		return (0);
 	if ((data())->skip_exec)
-		return (1);
+		return (next_word());
 	if (!get_outfiles((data())->p_index, struc))
 		return (0);
 	if ((data())->skip_exec)
-		return (1);
-	if ((data())->p_index->flag == PIP)
-		(data())->p_index = (data())->p_index->next;
-	while ((data())->p_index && (data())->p_index->flag != PIP)
-		(data())->p_index = (data())->p_index->next;
+		return (next_word());
 	return (1);
 }
 
@@ -96,14 +107,15 @@ int	switch_pipe(void)
 	return (1);
 }
 
-int	start_exec(char **envp)
+int	start_exec(char **envp, int i, int ret)
 {
-	int	i;
-
+	(data())->passif_mode = 0;
+	ret = init_heredocs();
+	(data())->passif_mode = 1;
+	if (!ret || ret == -1)
+		return (ret);
 	if (!nb_cmds(UP))
 		return (1);
-	if (!init_heredocs())
-		return (0);
 	if (!first_init())
 		return (0);
 	i = -1;

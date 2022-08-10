@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:31:33 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:09:22 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/08 19:48:20 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ int	update_env(char *new)
 	ret = update_exp_struct(new);
 	if ((data())->temp)
 		free((data())->temp);
+	(data())->temp = NULL;
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 22:01:06 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/04 22:37:37 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/10 09:09:59 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	remove_quotes(void)
 		free(buff);
 	if ((data())->temp)
 		free((data())->temp);
+	(data())->temp = NULL;
 	(data())->p_index->was_quoted = 1;
 	return (ret);
 }
@@ -60,10 +61,12 @@ int	rm_quotes(void)
 	while ((data())->p_index)
 	{
 		(data())->i = -1;
+		(data())->j = -1;
 		(data())->p_index->was_quoted = 0;
 		while ((data())->p_index->str[++(data())->i])
-			if ((data())->p_index->str[(data())->i] == S_QUOTE
-				|| (data())->p_index->str[(data())->i] == D_QUOTE)
+			if ((data())->i >= (data())->j - 2
+				&& ((data())->p_index->str[(data())->i] == S_QUOTE
+				|| (data())->p_index->str[(data())->i] == D_QUOTE))
 				if (!quote_finded((data())->p_index->str[(data())->i], 1))
 					return (0);
 		(data())->p_index = (data())->p_index->next;

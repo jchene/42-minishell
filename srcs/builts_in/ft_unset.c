@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:06:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/09 23:09:11 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,19 @@ int	check_valid_name(char *name)
 	int	i;
 
 	i = -1;
+	if (ft_isdigit(name[0]))
+	{
+		ft_putstr_fd("minishell: unset: `", 2);
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		return (0);
+	}
 	while (name[++i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
 		{
 			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd("%s", 2);
+			ft_putstr_fd(name, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			return (0);
 		}

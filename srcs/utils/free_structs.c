@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:39:17 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 11:32:43 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/08 21:59:38 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,15 @@ int	free_p_struct(t_parsing **start)
 	}
 	*start = NULL;
 	return (1);
+}
+
+int	free_that_line(void)
+{
+	while ((data())->line_start)
+	{
+		(data())->line_index = (data())->line_start;
+		(data())->line_start = (data())->line_start->next;
+		free((data())->line_index);
+	}
+	return (0);
 }

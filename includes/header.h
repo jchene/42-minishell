@@ -112,11 +112,11 @@ typedef struct s_exec
 	char				**args;
 }						t_exec;
 
-typedef struct s_word
+typedef struct s_line
 {
-	char				letter;
-	struct s_word		next;
-}						t_word;
+	char				c;
+	struct s_line		*next;
+}						t_line;
 
 typedef struct s_data
 {
@@ -129,7 +129,10 @@ typedef struct s_data
 	t_parsing	*p_index;
 	t_parsing	*he_start;
 	t_parsing	*he_index;
+	t_parsing	*lines;
 	t_exec		*exec_struc;
+	t_line		*line_start;
+	t_line		*line_index;
 	int			shlvl;
 	int			in_hrd;
 	int			passif_mode;
@@ -142,6 +145,7 @@ typedef struct s_data
 	int			stop;
 	int			exit_code;
 	int			got_from_builtsin;
+	int			error_occured;
 	pid_t		*child_ids;
 	int			he_read;
 	int			he_pipe[2];
@@ -191,9 +195,11 @@ int				ft_clear_history(void);
 
 int				read_input(void);
 int				split_line(void);
+int				check_input(void);
 int				rm_dollars(t_parsing *start, t_parsing *temp, int from_hrd);
 int				rm_quotes(void);
 int				replace_it(int finded, char **old, char **buff);
+int				is_quoted(int k, int quote);
 
 //				FLAGGING
 
@@ -214,12 +220,14 @@ int				pipe_at_end(t_parsing *cursor);
 int				fill_e_struc(t_exec *struc, char **envp);
 char			*get_path(char *string, t_exec *struc, char **envp);
 int				is_builtin(char *str);
-int				start_exec(char **envp);
+int				start_exec(char **envp, int i, int ret);
 int				child_process(t_exec *struc, char **envp);
 int				free_exec(void);
 int				exit_exec(int ret);
 void			apply_builtin(t_exec *struc, int ret, int is_last);
 int				exec_builtin(t_exec *struc);
+int				is_directory(char *string);
+int				free_that_line(void);
 unsigned long	display_error(int err_code, char *name, int bash_code);
 const char		*get_err_str(int err_code);
 int				is_directory(char *string);
@@ -227,7 +235,8 @@ int				is_directory(char *string);
 //				HEREDOCS
 
 int				init_heredocs(void);
-char			*end_of_hrd(t_parsing *lines);
+int				end_of_hrd(char **str, int ret);
+int				get_new_line(int ret);
 
 //				PATH
 
@@ -304,5 +313,6 @@ int				strict_cmp(char *s1, char *s2);
 
 void			display_list(void);
 void			display_heredocs(void);
+const char		*flag_name(int flag);
 
 #endif

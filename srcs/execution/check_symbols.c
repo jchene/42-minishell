@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:01:27 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/03 02:30:54 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/09 17:16:13 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	check_symbols(char *wrong_char)
 			tmp->flag = check_double_redir(tmp, wrong_char);
 		else if (tmp->flag == PIP)
 			tmp->flag = check_pipe(tmp, wrong_char);
+		if (tmp->flag == INV)
+			break ;
 		tmp = tmp->next;
 	}
 }

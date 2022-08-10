@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 20:50:05 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 11:41:40 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/09 16:41:52 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exit_properly(int ret)
 			free((data())->path[(data())->i]);
 		free((data())->path);
 	}
-	if ((data())->h_start)
+	if ((data())->h_start && !(data())->in_child)
 		if (!create_history_file())
 			perror("Error while creating history file ");
 	some_more_free();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 09:34:26 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 15:39:45 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/10 08:58:02 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ int	new_p_struct_member(void)
 
 int	read_input(void)
 {
+	(data())->passif_mode = 0;
 	(data())->line = readline("$ ");
+	(data())->passif_mode = 1;
 	if (!(data())->line)
 	{
 		ft_putstr_fd("exit\n", 1);

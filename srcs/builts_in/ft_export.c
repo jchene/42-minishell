@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:49 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 09:05:51 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/09 23:05:24 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	invalid_export(char *str)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
 	}
-	return (-1);
+	return (1);
 }
 
 int	envp_will_change(char *str)
@@ -33,6 +33,7 @@ int	envp_will_change(char *str)
 		if (!add_to_exp_struct(str))
 			return (0);
 		free((data())->temp);
+		(data())->temp = NULL;
 		if (!str[(data())->i])
 			return (1);
 		(data())->old_envp = cp_str_tab2((data())->envp);
@@ -74,7 +75,7 @@ int	ft_export(char **str, int fd)
 	{	
 		if (str[i][0] == '_' && str[i][1] == '=')
 			continue ;
-		if (str[i][0] == '=')
+		if (str[i][0] == '=' || ft_isdigit(str[i][0]))
 			return (invalid_export(str[i]));
 		(data())->i = -1;
 		while (str[i][++(data())->i] && str[i][(data())->i] != '=')

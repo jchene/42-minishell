@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/05 20:18:18 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/10 14:21:09 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 	char	*tmp;
 
 	i = -1;
-	while (dirs[++i])
+	while (string && string[0] && dirs[++i])
 	{
 		tmp = ft_strjoin(dirs[i], "/");
 		if (!tmp && !free_ptabn((void **)dirs))
@@ -55,7 +55,7 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 			return (NULL);
 		if (!access(path, X_OK) && !free_ptabn((void **)dirs))
 			return (set_path(path, struc));
-		if (!access(path, F_OK) && !free_ptabn((void **)dirs))
+		if (!access(path, F_OK) && !free_ptabn((void **)dirs) && ifree(path, 1))
 			return ((void *)display_error(ER_CMD_PE, string, CMD_NO_X) + 1);
 		free(path);
 	}
@@ -75,7 +75,10 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 		return (NULL);
 	set_path(path, struc);
 	if (is_directory(string))
+	{
+		
 		return ((void *)display_error(ER_CMD_DI, string, CMD_NO_X) + 1);
+	}
 	if (ft_ischarset(string, '/'))
 	{
 		if (!access(string, X_OK))
