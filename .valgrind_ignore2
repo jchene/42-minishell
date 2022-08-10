@@ -1,0 +1,10 @@
+{
+   supress-my-leaks
+   Memcheck:Leak
+   match-leak-kinds:reachable
+   ...
+   fun:init_history
+   fun:read_input
+   fun:new_prompt
+   fun:main
+}
