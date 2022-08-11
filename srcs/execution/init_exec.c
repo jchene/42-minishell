@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:51:05 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/10 07:00:17 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 15:07:33 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,24 @@ int	first_init(void)
 	(data())->child_ids = (int *)ft_calloc(sizeof(pid_t) * nb_cmds(NO_UP));
 	if (!(data())->child_ids)
 		return (0);
+	return (1);
+}
+
+//Wait for all childs to terminate
+int	wait_all(void)
+{
+	int	i;
+	int	temp;
+
+	i = -1;
+	temp = -1;
+	while (++i < nb_cmds(NO_UP))
+	{
+		if ((data())->child_ids[i] != -1)
+			if (waitpid((data())->child_ids[i], &temp, 0) < 0)
+				return (iperror("minishell: waitpid", 0));
+		if (!(data())->got_from_builtsin && !(data())->skip_exec && !temp)
+			(data())->exit_code = 0;
+	}
 	return (1);
 }

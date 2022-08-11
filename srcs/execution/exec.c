@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/10 14:49:06 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 14:47:11 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	child_process(t_exec *struc, char **envp)
 {
 	(data())->in_child++;
-	if (struc->input >= 0)
-		if (dup2(struc->input, STDIN_FILENO) < 0 && exit_exec(1))
+	if (struc->input >= 0 && dup2(struc->input, STDIN_FILENO) < 0
+		&& exit_exec(1))
 			exit(exit_properly((data())->exit_code));
-	if (struc->output >= 0)
-		if (dup2(struc->output, STDOUT_FILENO) < 0 && exit_exec(1))
+	if (struc->output >= 0 && dup2(struc->output, STDOUT_FILENO) < 0
+		&& exit_exec(1))
 			exit(exit_properly((data())->exit_code));
 	if ((!fd_update(&struc->to_close[P_RD], -1)
 		|| !fd_update(&struc->to_close[P_WR], -1)) && exit_exec(1))
@@ -36,7 +36,7 @@ int	child_process(t_exec *struc, char **envp)
 		ft_putstr_fd(": ", 2);
 		perror("");
 	}
-	exit_exec(0);
+	exit_exec(1);
 	exit(exit_properly(1));
 	return (0);
 }
@@ -62,15 +62,6 @@ int	launch_child(int i, char **envp)
 	return (1);
 }
 
-int	next_word(void)
-{
-	if ((data())->p_index->flag == PIP)
-		(data())->p_index = (data())->p_index->next;
-	while ((data())->p_index && (data())->p_index->flag != PIP)
-		(data())->p_index = (data())->p_index->next;
-	return (1);
-}
-
 //Fill struc with data, at start of function, cursor is on first word of block
 int	fill_e_struc(t_exec *struc, char **envp)
 {
@@ -86,6 +77,7 @@ int	fill_e_struc(t_exec *struc, char **envp)
 		return (0);
 	if ((data())->skip_exec)
 		return (next_word());
+	next_word();
 	return (1);
 }
 
@@ -109,9 +101,7 @@ int	switch_pipe(void)
 
 int	start_exec(char **envp, int i, int ret)
 {
-	(data())->passif_mode = 0;
 	ret = init_heredocs();
-	(data())->passif_mode = 1;
 	if (!ret || ret == -1)
 		return (ret);
 	if (!nb_cmds(UP))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 21:49:34 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/10 16:56:47 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/11 15:07:17 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,26 @@
 void	ctrl_c(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
-	if (!(data())->in_hrd && !(data())->child_ids
-		&& !(data())->in_child && (data())->temp_pid < 0)
+	if (!(data())->child_ids && (data())->temp_pid < 0
+		&& !(data())->passif_mode)
 	{
-		fprintf(stderr, "1\n");
 		(data())->exit_code = 130;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line ("", 0);
-		if (!(data())->passif_mode)
-			rl_redisplay();
+		rl_redisplay();
 	}
 	else if ((data())->in_hrd)
 	{
-		fprintf(stderr, "2\n");
 		write(1, "\n", 1);
-		(data())->passif_mode = 1;
 		close((data())->temp_pipe[P_WR]);
 		free_p_struct(&(data())->lines);
 		exit(exit_properly(130));
 	}
-	else if ((data())->in_child)
+	else
 	{
-		fprintf(stderr, "3\n");
-		exit_exec(0);
-		exit(exit_properly(130));
+		write(1, "\n", 1);
+		(data())->exit_code = 130;
 	}
 }
 

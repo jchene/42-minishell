@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 15:55:29 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/10 14:36:38 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 13:24:17 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,8 @@ int	init_heredocs(void)
 		}
 		(data())->p_index = (data())->p_index->next;
 	}
-	if ((data())->he_start && (data())->he_start->str && (data())->he_start->str)
+	if ((data())->he_start && (data())->he_start->str
+		&& (data())->he_start->str)
 		rm_dollars((data())->he_start, (data())->p_start, 1);
 	return (1);
 }

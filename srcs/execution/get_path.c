@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/10 14:21:09 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 14:05:01 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 		return (NULL);
 	set_path(path, struc);
 	if (is_directory(string))
-	{
-		
 		return ((void *)display_error(ER_CMD_DI, string, CMD_NO_X) + 1);
-	}
 	if (ft_ischarset(string, '/'))
 	{
 		if (!access(string, X_OK))

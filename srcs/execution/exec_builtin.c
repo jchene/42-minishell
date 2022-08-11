@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 22:45:44 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/10 06:14:23 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 14:47:13 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	exec_builtin(t_exec *struc)
 	(data())->new_pipe[P_WR] = -1;
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
-	exit_exec(1);
+	exit_exec((data())->exit_code);
 	exit(exit_properly((data())->exit_code));
-	return (1);
+	return (0);
 }
 
 void	apply_builtin(t_exec *struc, int ret, int is_last)

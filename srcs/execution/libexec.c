@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libexec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:01:53 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/10 14:27:18 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/10 17:02:19 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,6 @@ int	nb_cmds(int flag)
 		}
 	}
 	return (ret);
-}
-
-//Wait for all childs to terminate
-int	wait_all(void)
-{
-	int	i;
-	int	temp;
-
-	i = -1;
-	temp = 0;
-	while (++i < nb_cmds(NO_UP))
-		if ((data())->child_ids[i] != -1)
-			if (waitpid((data())->child_ids[i], &temp, 0) < 0)
-				return (iperror("minishell: waitpid", 0));
-	if (!(data())->got_from_builtsin && !(data())->skip_exec)
-		(data())->exit_code = WEXITSTATUS(temp);
-	return (1);
 }
 
 //Returns 1 if a pipe is present at then end of block cursor, 0 otherwise
@@ -88,4 +71,13 @@ int	is_directory(char *string)
 		return (1);
 	}
 	return (0);
+}
+
+int	next_word(void)
+{
+	if ((data())->p_index->flag == PIP)
+		(data())->p_index = (data())->p_index->next;
+	while ((data())->p_index && (data())->p_index->flag != PIP)
+		(data())->p_index = (data())->p_index->next;
+	return (1);
 }
