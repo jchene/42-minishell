@@ -258,7 +258,6 @@ int				is_directory(char *string);
 int				free_that_line(void);
 unsigned long	display_error(int err_code, char *name, int bash_code);
 const char		*get_err_str(int err_code);
-int				is_directory(char *string);
 int				next_word(void);
 
 //				HEREDOCS
