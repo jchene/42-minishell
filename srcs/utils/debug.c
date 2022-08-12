@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 17:33:05 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/06 13:54:29 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/12 13:35:21 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,18 @@ const char	*flag_name(int flag)
 //Display leking word list
 void	display_list(void)
 {
-	(data())->p_index = (data())->p_start;
-	while ((data())->p_index)
+	t_parsing *index;
+	
+	index = (data())->p_start;
+	while (index)
 	{
-		if ((data())->p_index->flag == INV)
-			printf("%s*%s* - %s%s\n", RED_CODE, (data())->p_index->str,
-				flag_name((data())->p_index->flag), RESET_CODE);
+		if (index->flag == INV)
+			printf("%s*%s* - %s%s\n", RED_CODE, index->str,
+				flag_name(index->flag), RESET_CODE);
 		else
-			printf("%s*%s* - %s%s\n", GREEN_CODE, (data())->p_index->str,
-				flag_name((data())->p_index->flag), RESET_CODE);
-		(data())->p_index = (data())->p_index->next;
+			printf("%s*%s* - %s%s\n", GREEN_CODE, index->str,
+				flag_name(index->flag), RESET_CODE);
+		index = index->next;
 	}
 }
 

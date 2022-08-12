@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:20 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/06 14:05:53 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/12 22:23:18 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ int	update_pwd(int i, char *cd)
 
 	str = malloc(sizeof(char *) * 4);
 	if (!str)
-		return (0);
+		return (1);
 	str[3] = NULL;
 	str[2] = NULL;
+	str[1] = NULL;
 	str[0] = NULL;
 	while ((data())->envp[++i])
 	{
@@ -65,17 +66,17 @@ int	update_pwd(int i, char *cd)
 		{
 			str[1] = ft_strjoin("OLD", (data())->envp[i]);
 			if (!str[1])
-				return (free_ptab((void **)str, 4));
+				return (free_ptab((void **)str, 4) - 1);
 			cd = get_current_dir(NULL, 1);
 			str[2] = ft_strjoin("PWD=", cd);
+			free(cd);
 			if (!str[2])
-				return (free_ptab((void **)str, 4));
+				return (free_ptab((void **)str, 4) - 1);
 			if (ft_export(str, 2))
-				return (free_ptab((void **)str, 4));
+				return (free_ptab((void **)str, 4) - 1);
 		}
 	}
-	free_ptab((void **)str, 4);
-	return (1);
+	return (free_ptab((void **)str, 4));
 }
 
 int	ft_cd(char **dir, char *str)

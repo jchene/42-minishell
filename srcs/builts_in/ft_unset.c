@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/09 23:09:11 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/12 21:48:01 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,17 @@ int	remove_from_envp(int i)
 	return (1);
 }
 
-int	check_valid_name(char *name)
+int	check_valid_name(char *name, int *ret)
 {
 	int	i;
 
 	i = -1;
-	if (ft_isdigit(name[0]))
+	if (!name[0] || ft_isdigit(name[0]))
 	{
 		ft_putstr_fd("minishell: unset: `", 2);
 		ft_putstr_fd(name, 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
+		*ret = 1;
 		return (0);
 	}
 	while (name[++i])
@@ -58,13 +59,14 @@ int	check_valid_name(char *name)
 			ft_putstr_fd("minishell: unset: `", 2);
 			ft_putstr_fd(name, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
+			*ret = 1;
 			return (0);
 		}
 	}
 	return (1);
 }
 
-int	remove_from_exp(char *name)
+void remove_from_exp(char *name)
 {
 	int		size;
 
@@ -76,27 +78,34 @@ int	remove_from_exp(char *name)
 			&& (!(data())->exp_index->str[size]
 				|| (data())->exp_index->str[size] == '='))
 		{
-			(data())->exp_index->next->prev = (data())->exp_index->prev;
-			(data())->exp_index->prev->next = (data())->exp_index->next;
+			if ((data())->exp_index->next)
+				(data())->exp_index->next->prev = (data())->exp_index->prev;
+			else
+				(data())->exp_end = (data())->exp_index->prev;
+			if ((data())->exp_index->prev)
+				(data())->exp_index->prev->next = (data())->exp_index->next;
+			else
+				(data())->exp_end = (data())->exp_index->next;
 			free((data())->exp_index->str);
 			free((data())->exp_index);
 			break ;
 		}
 		(data())->exp_index = (data())->exp_index->next;
 	}
-	return (1);
 }
 
 int	ft_unset(char **name)
 {
 	int		i;
 	char	*temp;
-
+	int		ret;
+	
 	i = 0;
+	ret = 0;
 	while (name[++i])
 	{
-		if (!check_valid_name(name[i]))
-			return (1);
+		if (!check_valid_name(name[i], &ret))
+			continue ;
 		temp = ft_strjoin(name[i], "=");
 		if (!temp)
 			return (-1);
@@ -105,10 +114,9 @@ int	ft_unset(char **name)
 			if (ft_strncmp((data())->envp[(data())->i],
 					temp, ft_strlen(temp) + 1))
 				if (!remove_from_envp((data())->i))
-					return (ifree((void *)temp, 0));
+					return (ifree((void *)temp, -1));
 		free(temp);
-		if (!remove_from_exp(name[i]))
-			return (-1);
+		remove_from_exp(name[i]);
 	}
-	return (0);
+	return (ret);
 }

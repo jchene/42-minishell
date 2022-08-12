@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:49 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/09 23:05:24 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/12 21:15:51 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,24 @@ int	print_exp_struct(int fd)
 int	ft_export(char **str, int fd)
 {
 	int	i;
+	int	ret;
 
 	i = 0;
+	ret = 0;
 	if (!str[1])
 		return (print_exp_struct(fd));
-	while (str[++i])
+	while (!fd && str[++i])
 	{	
 		if (str[i][0] == '_' && str[i][1] == '=')
 			continue ;
-		if (str[i][0] == '=' || ft_isdigit(str[i][0]))
-			return (invalid_export(str[i]));
+		if (!str[i][0] || str[i][0] == '=' || ft_isdigit(str[i][0]))
+			ret = invalid_export(str[i]);
 		(data())->i = -1;
 		while (str[i][++(data())->i] && str[i][(data())->i] != '=')
 			if (!ft_isalnum(str[i][(data())->i]) && str[i][(data())->i] != '_')
-				return (invalid_export(str[i]));
+				ret = invalid_export(str[i]);
 		if (!envp_will_change(str[i]))
 			return (-1);
 	}
-	return (0);
+	return (ret);
 }

@@ -92,11 +92,29 @@ typedef struct s_history
 	struct s_history	*prev;
 }						t_history;
 
+typedef struct s_quotes
+{
+	int				quoted_from;
+	int				quoted_to;
+	int				quote;
+	struct s_quotes	*next;
+}					t_quotes;
+
+typedef struct s_dollars
+{
+	int					from;
+	int					to;
+	struct s_dollars	*next;
+}						t_dollars;
+
 typedef struct s_parsing
 {
 	char				*str;
 	int					flag;
 	int					was_quoted;
+	int					no_extend;
+	t_quotes			*quotes;
+	t_dollars			*dollars;
 	struct s_parsing	*next;
 	struct s_parsing	*prev;
 }						t_parsing;
@@ -157,8 +175,11 @@ typedef struct s_data
 	int			skip_exec;
 	int			last_skip;
 	char		*temp;
+	char		*temp2;
 	int			i;
 	int			j;
+	int			old;
+	int			offset;
 }				t_data;
 
 //				ENV MANAGEMENT
@@ -200,6 +221,13 @@ int				rm_dollars(t_parsing *start, t_parsing *temp, int from_hrd);
 int				rm_quotes(void);
 int				replace_it(int finded, char **old, char **buff);
 int				is_quoted(int k, int quote);
+void			init_p_struct_member(t_parsing *index);
+int				was_quoted(t_quotes *index, int i);
+int				split_ret(void);
+int				convert_it(int size, int k, int finded);
+int				return_it(int ret, char **old, char **buff, int diff);
+int				dollar_finded(int ret);
+int				from_dollar(t_dollars *index, int i);
 
 //				FLAGGING
 

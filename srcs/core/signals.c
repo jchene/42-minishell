@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 21:49:34 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/11 15:07:17 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 16:10:07 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	ctrl_bs(int sig)
 {
 	(void)sig;
 	if ((data())->passif_mode)
+	{
+		(data())->exit_code = 131;
 		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+	}
 	else
 		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }

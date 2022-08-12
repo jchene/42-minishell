@@ -36,20 +36,21 @@ int	new_prompt(void)
 		return (0);
 	if (!split_line())
 		return (0);
+	if (!rm_quotes())
+		return (0);
+	if (!rm_dollars((data())->p_start, NULL, 0))
+		return (0);
 	if (!check_input())
 		return (end_of_prompt());
 	if (!flag_words())
 		return (end_of_prompt());
-	if (!rm_dollars((data())->p_start, (data())->p_start, 0))
-		return (0);
-	if (!rm_quotes())
-		return (0);
 	if (!(data())->p_start)
 		return (end_of_prompt());
 	if (!start_exec((data())->envp, 0, 0))
 		return (0);
 	if (!wait_all())
 		return (0);
+	printf("exit code : %i\n", (data())->exit_code);
 	return (end_of_prompt());
 }
 

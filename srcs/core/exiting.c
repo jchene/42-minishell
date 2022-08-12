@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 20:50:05 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/09 16:41:52 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/11 17:14:13 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	some_more_free(void)
 
 int	exit_properly(int ret)
 {
+	printf("exiting ! exit code : %i\n", (data())->exit_code);
 	rl_clear_history();
 	if ((data())->path)
 	{
@@ -42,9 +43,16 @@ int	exit_properly(int ret)
 			free((data())->path[(data())->i]);
 		free((data())->path);
 	}
-	if ((data())->h_start && !(data())->in_child)
-		if (!create_history_file())
-			perror("Error while creating history file ");
+	if ((data())->h_start)
+	{
+		if (!(data())->in_child)
+		{	
+			if (!create_history_file())
+				perror("Error while creating history file ");
+		}
+		else
+			ft_clear_history();
+	}
 	some_more_free();
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 09:34:26 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/10 08:58:02 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/12 18:47:28 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ int	fill_p_struct_str(void)
 	return (1);
 }
 
+void init_p_struct_member(t_parsing *index)
+{
+	index->prev = NULL;
+	index->next = NULL;
+	index->flag = -1;
+	index->quotes = NULL;
+	index->dollars = NULL;
+	index->was_quoted = 0;
+	index->no_extend = 0;
+	index->str = NULL;
+}
+
 int	new_p_struct_member(void)
 {
 	if (!(data())->p_start)
@@ -28,10 +40,7 @@ int	new_p_struct_member(void)
 		(data())->p_start = malloc(sizeof(t_parsing));
 		if (!((data())->p_start))
 			return (0);
-		(data())->p_start->prev = NULL;
-		(data())->p_start->next = NULL;
-		(data())->p_start->flag = -1;
-		(data())->p_start->was_quoted = 0;
+		init_p_struct_member((data())->p_start);
 		(data())->p_index = (data())->p_start;
 	}
 	else
@@ -42,8 +51,8 @@ int	new_p_struct_member(void)
 		(data())->p_index->next = malloc(sizeof(t_parsing));
 		if (!((data())->p_index->next))
 			return (0);
+		init_p_struct_member((data())->p_index->next);
 		(data())->p_index->next->prev = (data())->p_index;
-		(data())->p_index->next->next = NULL;
 		(data())->p_index = (data())->p_index->next;
 	}
 	return (1);
@@ -58,6 +67,7 @@ int	read_input(void)
 	{
 		ft_putstr_fd("exit\n", 1);
 		(data())->stop = 1;
+		(data())->exit_code = 0;
 		return (0);
 	}
 	if ((data())->line && (data())->line[0])

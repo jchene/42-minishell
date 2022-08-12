@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 15:55:29 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/11 13:24:17 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/12 18:32:59 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	add_new_line(t_parsing *index)
 		(data())->line = NULL;
 		return (0);
 	}
+	init_p_struct_member(index->next);
 	index = index->next;
-	index->next = NULL;
 	index->str = ft_strdup((data())->line);
 	if (!index->str)
 	{
@@ -47,7 +47,7 @@ int	init_lines(void)
 		(data())->line = NULL;
 		return (0);
 	}
-	(data())->lines->next = NULL;
+	init_p_struct_member((data())->lines);
 	(data())->lines->str = ft_strdup((data())->line);
 	if (!(data())->lines->str)
 	{
@@ -95,7 +95,7 @@ int	new_heredoc(int ret)
 		(data())->he_start = malloc(sizeof(t_parsing));
 		if (!(data())->he_start)
 			return (0);
-		(data())->he_start->next = NULL;
+		init_p_struct_member((data())->he_start);
 		ret = get_lines(&(data())->he_start->str, 0);
 		if (!ret || ret == -1)
 			return (ret);
@@ -108,7 +108,7 @@ int	new_heredoc(int ret)
 		(data())->he_index->next = malloc(sizeof(t_parsing));
 		if (!(data())->he_index->next)
 			return (0);
-		(data())->he_index->next->next = NULL;
+		init_p_struct_member((data())->he_start);
 		ret = get_lines(&(data())->he_index->next->str, 0);
 		if (!ret || ret == -1)
 			return (ret);
