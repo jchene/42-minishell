@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:00:15 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:14:43 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,8 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 	return ((void *)1);
 }
 
-//Returns path of executable in string if found, NULL otherwise
-char	*get_path(char *string, t_exec *struc, char **envp)
+char	*check_cmd(char *string)
 {
-	char	**dirs;
-	char	*path;
-
-	path = ft_strdup(string);
-	if (!path)
-		return (NULL);
-	set_path(path, struc);
 	if (is_directory(string))
 		return ((void *)display_error(ER_CMD_DI, string, CMD_NO_X) + 1);
 	if (ft_ischarset(string, '/'))
@@ -86,6 +78,21 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	}
 	if (is_builtin(string))
 		return ((void *)1);
+	return (NULL);
+}
+
+//Returns path of executable in string if found, NULL otherwise
+char	*get_path(char *string, t_exec *struc, char **envp)
+{
+	char	**dirs;
+	char	*path;
+
+	path = ft_strdup(string);
+	if (!path)
+		return (NULL);
+	set_path(path, struc);
+	if (check_cmd(string))
+		return (1);
 	free(path);
 	set_path(NULL, struc);
 	if (get_env_index("PATH", envp) != -1)

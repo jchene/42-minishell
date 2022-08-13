@@ -261,6 +261,8 @@ unsigned long	display_error(int err_code, char *name, int bash_code);
 const char		*get_err_str(int err_code);
 int				is_directory(char *string);
 int				next_word(void);
+int				child_process(t_exec *struc, char **envp);
+int				is_builtin(char *str);
 
 //				HEREDOCS
 

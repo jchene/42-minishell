@@ -6,11 +6,32 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:42 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:04:37 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:14:57 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
+
+void	check_option(char **str, int *n, int *h)
+{
+	int	i;
+
+	while (str[++(*h)])
+	{
+		if (str[*h][0] == '-')
+		{
+			i = 1;
+			while (str[*h][i] && str[*h][i] == 'n')
+				i++;
+			if (!str[*h][i] && str[*h][i - 1] == 'n')
+				*n++;
+			else
+				break ;
+		}
+		else
+			break ;
+	}
+}
 
 int	ft_echo(char **str, int fd)
 {
@@ -20,22 +41,9 @@ int	ft_echo(char **str, int fd)
 
 	h = 0;
 	n = 0;
-	while (str[++h])
-	{
-		if (str[h][0] == '-')
-		{
-			i = 1;
-			while (str[h][i] && str[h][i] == 'n')
-				i++;
-			if (!str[h][i] && str[h][i - 1] == 'n')
-				n++;
-			else
-				break ;
-		}
-		else
-			break ;
-	}
-	while (str[h])
+	if (str)
+		check_option(str, &n, &h);
+	while (str && str[h])
 	{
 		i = -1;
 		while (str[h][++i])

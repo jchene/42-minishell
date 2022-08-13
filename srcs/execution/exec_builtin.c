@@ -6,32 +6,11 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 22:45:44 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:04:43 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:20:04 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
-
-int	is_builtin(char *str)
-{
-	if (!str || !str[0])
-		return (-1);
-	if (ft_strcmp(str, "cd"))
-		return (1);
-	if (ft_strcmp(str, "env"))
-		return (2);
-	if (ft_strcmp(str, "echo"))
-		return (3);
-	if (ft_strcmp(str, "exit"))
-		return (4);
-	if (ft_strcmp(str, "export"))
-		return (5);
-	if (ft_strcmp(str, "pwd"))
-		return (6);
-	if (ft_strcmp(str, "unset"))
-		return (7);
-	return (0);
-}
 
 void	*check_cmd(char *cmd, char *path, char **dirs, char *tmp)
 {
@@ -115,10 +94,15 @@ int	exec_builtin(t_exec *struc)
 	return (0);
 }
 
-void	apply_builtin(t_exec *struc, int ret, int is_last)
+void	apply_builtin_norm(int *is_last)
 {
 	if (!(data())->p_index)
-		is_last++;
+		*is_last++;
+}
+
+void	apply_builtin(t_exec *struc, int ret, int is_last)
+{
+	apply_builtin_norm(&is_last);
 	if ((data())->p_index && (data())->p_index->flag == PIP)
 		return ;
 	if (ret == 1)

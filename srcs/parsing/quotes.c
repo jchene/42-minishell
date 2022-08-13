@@ -6,28 +6,11 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 22:01:06 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 17:58:17 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:22:08 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
-
-int	new_quotes(int quote)
-{
-	t_quotes	*index;
-
-	index = (data())->p_index->quotes;
-	while (index->next)
-		index = index->next;
-	index->next = malloc(sizeof(t_quotes));
-	if (!index->next)
-		return (0);
-	index->next->quote = quote;
-	index->next->quoted_from = (data())->i;
-	index->next->quoted_to = (data())->j - 3;
-	index->next->next = NULL;
-	return (1);
-}
 
 int	first_quotes(int quote)
 {
@@ -70,14 +53,8 @@ int	mark_dollar(t_quotes *index, int quote)
 	return (1);
 }
 
-int	remove_quotes(int quote)
+int	remove_quotes(int quote, char *old, char *buff, int ret)
 {
-	char	*old;
-	char	*buff;
-	int		ret;
-
-	old = NULL;
-	buff = NULL;
 	ret = replace_it(1, &old, &buff);
 	if (old)
 		free(old);
@@ -113,7 +90,7 @@ int	quote_finded(int quote, int ret)
 			if (!(data())->temp)
 				return (0);
 			(data())->j++;
-			ret = remove_quotes(quote);
+			ret = remove_quotes(quote, NULL, NULL, 0);
 			if (!ret)
 				return (ret);
 			break ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:20 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 01:38:51 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:15:09 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@ char	*get_current_dir(char *buff, int size)
 	return (buff);
 }
 
-int	update_pwd(int i, char *cd)
+int	update_pwd(int i, char *cd, char **str)
 {
-	char	**str;
-
 	str = malloc(sizeof(char *) * 4);
 	if (!str)
 		return (1);
@@ -96,7 +94,7 @@ int	ft_cd(char **dir, char *str)
 			return (1);
 		}
 		free(str);
-		update_pwd(-1, NULL);
+		update_pwd(-1, NULL, NULL);
 		return (0);
 	}
 	if (chdir(dir[1]))
@@ -104,6 +102,6 @@ int	ft_cd(char **dir, char *str)
 		perror("minishell: cd");
 		return (1);
 	}
-	update_pwd(-1, NULL);
+	update_pwd(-1, NULL, NULL);
 	return (0);
 }

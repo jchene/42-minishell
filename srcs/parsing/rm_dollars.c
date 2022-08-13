@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 18:44:23 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 17:56:21 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:22:50 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,6 @@ int	from_dollar(t_dollars *index, int i)
 	{
 		if (i >= index->from && i <= index->to)
 			return (1);
-		index = index->next;
-	}
-	return (0);
-}
-
-int	was_quoted(t_quotes *index, int i)
-{
-	while (index)
-	{
-		if (i >= index->quoted_from && i <= index->quoted_to)
-			return (index->quote);
 		index = index->next;
 	}
 	return (0);
