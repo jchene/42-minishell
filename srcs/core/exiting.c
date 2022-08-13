@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 20:50:05 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/11 17:14:13 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 16:08:27 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	some_more_free(void)
 
 int	exit_properly(int ret)
 {
-	printf("exiting ! exit code : %i\n", (data())->exit_code);
 	rl_clear_history();
 	if ((data())->path)
 	{

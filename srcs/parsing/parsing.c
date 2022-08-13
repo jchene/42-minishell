@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 09:34:26 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 18:47:28 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:57:34 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	fill_p_struct_str(void)
 	return (1);
 }
 
-void init_p_struct_member(t_parsing *index)
+void	init_p_struct_member(t_parsing *index)
 {
 	index->prev = NULL;
 	index->next = NULL;

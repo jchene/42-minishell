@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:42 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/10 00:09:05 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:04:37 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_echo(char **str, int fd)
 			i = 1;
 			while (str[h][i] && str[h][i] == 'n')
 				i++;
-			if (!str[h][i])
+			if (!str[h][i] && str[h][i - 1] == 'n')
 				n++;
 			else
 				break ;

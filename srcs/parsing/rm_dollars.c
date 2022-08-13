@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rm_dollars.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 18:44:23 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 20:42:05 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:56:21 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	from_dollar(t_dollars *index, int i)
 	while (index)
 	{
 		if (i >= index->from && i <= index->to)
-				return (1);
+			return (1);
 		index = index->next;
 	}
 	return (0);
@@ -28,7 +28,7 @@ int	was_quoted(t_quotes *index, int i)
 	while (index)
 	{
 		if (i >= index->quoted_from && i <= index->quoted_to)
-				return (index->quote);
+			return (index->quote);
 		index = index->next;
 	}
 	return (0);
@@ -43,14 +43,14 @@ int	go_til_end(int from_hrd)
 			&& !(data())->p_index->no_extend
 			&& set_int(&(data())->j, (data())->i, 1) && (from_hrd
 				|| (!from_hrd && was_quoted((data())->p_index->quotes,
-				(data())->i) != S_QUOTE)))
+						(data())->i) != S_QUOTE)))
 			if (!dollar_finded(1))
 				return (0);
 	(data())->i = 0;
 	while ((data())->p_index->str[(data())->i])
 		(data())->i++;
 	if (!from_hrd && !split_ret())
-			return (0);
+		return (0);
 	return (1);
 }
 

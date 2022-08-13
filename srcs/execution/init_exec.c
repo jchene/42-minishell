@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:51:05 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/12 21:36:02 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:53:27 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	first_init(void)
 	(data())->new_pipe[P_WR] = -1;
 	(data())->skip_exec = 0;
 	(data())->last_skip = 0;
-	(data())->child_ids = (int *)ft_calloc(sizeof(pid_t) * nb_cmds(NO_UP));
+	(data())->child_ids = (int *)ft_calloc(sizeof(pid_t) * nb_pipes(NO_UP));
 	if (!(data())->child_ids)
 		return (0);
 	return (1);
@@ -111,7 +111,7 @@ int	wait_all(void)
 	i = -1;
 	temp = -1;
 	success = 0;
-	while (++i < nb_cmds(NO_UP))
+	while (++i < nb_pipes(NO_UP))
 	{
 		if ((data())->child_ids[i] != -1)
 			if (waitpid((data())->child_ids[i], &temp, 0) < 0)

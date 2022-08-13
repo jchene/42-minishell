@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infiles.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:23:32 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/11 14:06:40 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:32:00 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ void	*fill_inpipe(t_exec *struc)
 }
 
 //Opens an infile and put it's fd into infiles
-int	fill_infile(t_parsing *cursor, t_exec *struc)
+int	fill_infile(t_parsing *cursor, t_exec *struc, int redir)
 {
-	int	redir;
-
 	if (is_directory(cursor->next->str))
 		return (display_error(ER_CMD_DI, cursor->next->str, GNRL_ERR) + 1);
 	if (access(cursor->next->str, F_OK))
@@ -54,8 +52,7 @@ int	fill_infile(t_parsing *cursor, t_exec *struc)
 	return (1);
 }
 
-//Get a heredoc fd and put it in infiles
-int	fill_heredoc(t_exec *struc, t_parsing *htmp, int i)
+int	prepare_hdr(t_exec *struc)
 {
 	if (!fd_update(&(data())->he_pipe[P_RD], -1)
 		|| !fd_update(&(data())->he_pipe[P_WR], -1))
@@ -67,6 +64,14 @@ int	fill_heredoc(t_exec *struc, t_parsing *htmp, int i)
 	}
 	if (pipe((data())->he_pipe) < 0)
 		return (iperror("minishell: pipe failed", 0));
+	return (1);
+}
+
+//Get a heredoc fd and put it in infiles
+int	fill_heredoc(t_exec *struc, t_parsing *htmp, int i)
+{
+	if (!prepare_hdr(struc))
+		return (0);
 	htmp = (data())->he_start;
 	while (++i < (data())->he_read)
 		htmp = htmp->next;
@@ -100,7 +105,7 @@ void	*get_infiles(t_parsing *tmp, t_exec *struc)
 	while (tmp && tmp->flag != PIP && !(data())->skip_exec)
 	{
 		if (tmp->flag == INF)
-			if (!fill_infile(tmp, struc))
+			if (!fill_infile(tmp, struc, 0))
 				return (NULL);
 		if (tmp->flag == HRD)
 			if (!fill_heredoc(struc, NULL, -1))

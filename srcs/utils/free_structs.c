@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:39:17 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 20:04:32 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 16:24:16 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,36 @@ int	free_exp_struct(void)
 	return (0);
 }
 
+void	free_p_struct_content(t_parsing *temp)
+{
+	t_quotes	*temp_bis;
+	t_dollars	*temp_ter;
+
+	if (temp->str)
+		free(temp->str);
+	while (temp->quotes)
+	{
+		temp_bis = temp->quotes;
+		temp->quotes = temp->quotes->next;
+		free(temp_bis);
+	}
+	while (temp->dollars)
+	{
+		temp_ter = temp->dollars;
+		temp->dollars = temp->dollars->next;
+		free(temp_ter);
+	}
+}
+
 int	free_p_struct(t_parsing **start)
 {
 	t_parsing	*temp;
-	t_quotes	*temp_bis;
-	t_dollars	*temp_ter;
 
 	while (*start)
 	{
 		temp = *start;
 		*start = (*start)->next;
-		if (temp->str)
-			free(temp->str);
-		while (temp->quotes)
-		{
-			temp_bis = temp->quotes;
-			temp->quotes = temp->quotes->next;
-			free(temp_bis);
-		}
-		while (temp->dollars)
-		{
-			temp_ter = temp->dollars;
-			temp->dollars = temp->dollars->next;
-			free(temp_ter);
-		}
+		free_p_struct_content(temp);
 		free(temp);
 	}
 	*start = NULL;

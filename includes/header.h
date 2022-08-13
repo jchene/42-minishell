@@ -242,6 +242,7 @@ int				flag_words(void);
 int				first_init(void);
 int				fd_update(int *fd_ptr, int value);
 int				nb_cmds(int reset);
+int				nb_pipes(int flag);
 int				wait_all(void);
 int				init_exec(void);
 int				pipe_at_end(t_parsing *cursor);
@@ -258,6 +259,7 @@ int				is_directory(char *string);
 int				free_that_line(void);
 unsigned long	display_error(int err_code, char *name, int bash_code);
 const char		*get_err_str(int err_code);
+int				is_directory(char *string);
 int				next_word(void);
 
 //				HEREDOCS
@@ -283,7 +285,7 @@ int				count_list_flags(int flag);
 //				BUILTS IN
 
 int				ft_pwd(int fd);
-void			ft_exit(void);
+void			ft_exit(char **args);
 int				ft_echo(char **str, int fd);
 int				ft_cd(char **dir, char *str);
 int				ft_export(char **str, int fd);

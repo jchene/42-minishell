@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 22:01:06 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 19:19:48 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:58:17 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	first_quotes(int quote)
 	(data())->p_index->quotes->quoted_from = (data())->i;
 	(data())->p_index->quotes->quoted_to = (data())->j - 3;
 	(data())->p_index->quotes->next = NULL;
-	return (1);	
+	return (1);
 }
 
 int	mark_dollar(t_quotes *index, int quote)
@@ -52,7 +52,7 @@ int	mark_dollar(t_quotes *index, int quote)
 		(data())->p_index->quotes->quoted_from = (data())->i - 1;
 		(data())->p_index->quotes->quoted_to = (data())->i - 1;
 		(data())->p_index->quotes->next = NULL;
-		return (1);	
+		return (1);
 	}
 	else
 	{
@@ -135,7 +135,7 @@ int	rm_quotes(void)
 		{	
 			if ((data())->i > (data())->j - 3
 				&& ((data())->p_index->str[(data())->i] == S_QUOTE
-				|| (data())->p_index->str[(data())->i] == D_QUOTE))
+					|| (data())->p_index->str[(data())->i] == D_QUOTE))
 				if (!quote_finded((data())->p_index->str[(data())->i], 1))
 					return (0);
 		}

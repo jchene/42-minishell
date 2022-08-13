@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 01:22:53 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/09 01:22:58 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:50:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,25 @@ unsigned long	display_error(int err_code, char *name, int bash_code)
 		(data())->skip_exec = 1;
 	}
 	return (0);
+}
+
+int	nb_pipes(int flag)
+{
+	static int	ret = 0;
+	t_parsing	*tmp;
+
+	if (flag)
+		ret = -1;
+	if (ret == -1)
+	{
+		tmp = (data())->p_start;
+		ret = 0;
+		while (tmp)
+		{
+			if (tmp->flag == PIP)
+				ret++;
+			tmp = tmp->next;
+		}
+	}
+	return (ret + 1);
 }

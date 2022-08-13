@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_finded.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:39:32 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 20:41:57 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:58:34 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int	check_for_insta_return(void)
 		return (replace_by_exit_code());
 	}
 	if (!(data())->p_index->str[(data())->j + 1]
-			|| (!ft_isalnum((data())->p_index->str[(data())->j + 1])
-				&& (data())->p_index->str[(data())->j + 1] != '_'
-				&& (data())->p_index->str[(data())->j + 1] != '?'))
+		|| (!ft_isalnum((data())->p_index->str[(data())->j + 1])
+			&& (data())->p_index->str[(data())->j + 1] != '_'
+			&& (data())->p_index->str[(data())->j + 1] != '?'))
 		return (1);
 	return (check_for_insta_return_bis());
 }
@@ -88,8 +88,8 @@ int	dollar_finded(int ret)
 		if (!(data())->p_index->str[(data())->j]
 			|| (!ft_isalnum((data())->p_index->str[(data())->j])
 				&& (data())->p_index->str[(data())->j] != '_')
-			|| was_quoted((data())->p_index->quotes, (data())->j) !=
-				(data())->old)
+			|| was_quoted((data())->p_index->quotes, (data())->j)
+			!= (data())->old)
 		{
 			(data())->temp = ft_strndup((data())->p_index->str,
 					(data())->j - (data())->i - 1, (data())->i + 1);

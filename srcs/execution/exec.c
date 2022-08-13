@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/12 23:41:07 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:05:35 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,27 @@ int	child_process(t_exec *struc, char **envp)
 	(data())->in_child++;
 	if (struc->input >= 0 && dup2(struc->input, STDIN_FILENO) < 0
 		&& exit_exec(1))
-			exit(exit_properly((data())->exit_code));
+		exit(exit_properly((data())->exit_code));
 	if (struc->output >= 0 && dup2(struc->output, STDOUT_FILENO) < 0
 		&& exit_exec(1))
-			exit(exit_properly((data())->exit_code));
+		exit(exit_properly((data())->exit_code));
 	if ((!fd_update(&struc->to_close[P_RD], -1)
-		|| !fd_update(&struc->to_close[P_WR], -1)) && exit_exec(1))
+			|| !fd_update(&struc->to_close[P_WR], -1)) && exit_exec(1))
 		exit(exit_properly((data())->exit_code));
 	if ((!fd_update(&struc->out_pipe[P_RD], -1)
-		|| !fd_update(&struc->out_pipe[P_WR], -1)) && exit_exec(1))
+			|| !fd_update(&struc->out_pipe[P_WR], -1)) && exit_exec(1))
 		exit(exit_properly((data())->exit_code));
 	if (is_builtin(struc->path))
 		return (exec_builtin(struc));
-	if (execve(struc->path, struc->args, envp) < 0)
+	if (struc->path)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(struc->path, 2);
-		ft_putstr_fd(": ", 2);
-		perror("");
+		if (execve(struc->path, struc->args, envp) < 0)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(struc->path, 2);
+			ft_putstr_fd(": ", 2);
+			perror("");
+		}
 	}
 	exit_exec(1);
 	exit(exit_properly(1));
@@ -51,7 +54,7 @@ int	launch_child(int i, char **envp)
 		return (1);
 	}
 	ret = is_builtin((data())->exec_struc->path);
-	if (ret)
+	if (ret == 1)
 		apply_builtin((data())->exec_struc, ret, 0);
 	(data())->child_ids[i] = fork();
 	if ((data())->child_ids[i] < 0)
@@ -104,13 +107,12 @@ int	start_exec(char **envp, int i, int ret)
 	ret = init_heredocs();
 	if (!ret || ret == -1)
 		return (ret);
-	if (!nb_cmds(UP))
-		return (1);
+	nb_pipes(UP);
 	if (!first_init())
 		return (0);
 	i = -1;
 	(data())->p_index = (data())->p_start;
-	while (++i < nb_cmds(NO_UP))
+	while (++i < nb_pipes(NO_UP))
 	{
 		if (!init_exec())
 			return (exit_exec(0));

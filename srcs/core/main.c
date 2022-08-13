@@ -50,7 +50,6 @@ int	new_prompt(void)
 		return (0);
 	if (!wait_all())
 		return (0);
-	printf("exit code : %i\n", (data())->exit_code);
 	return (end_of_prompt());
 }
 

@@ -6,7 +6,7 @@
 /*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:20 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 22:23:18 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 01:38:51 by anguinau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,14 @@ int	ft_cd(char **dir, char *str)
 			return (1);
 		}
 		free(str);
-		return (update_pwd(-1, NULL));
+		update_pwd(-1, NULL);
+		return (0);
 	}
 	if (chdir(dir[1]))
 	{
 		perror("minishell: cd");
 		return (1);
 	}
-	return (update_pwd(-1, NULL));
+	update_pwd(-1, NULL);
+	return (0);
 }

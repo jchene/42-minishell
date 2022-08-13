@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 21:13:30 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:00:15 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	set_path(NULL, struc);
 	if (get_env_index("PATH", envp) != -1)
 		dirs = ft_split(envp[get_env_index("PATH", envp)], ':');
-	else 
+	else
 		return ((void *)display_error(ER_CMD_PA, string, CMD_NO_F) + 1);
 	if (!dirs)
 		return (NULL);

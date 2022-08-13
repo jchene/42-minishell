@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:59 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 21:48:01 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:59:27 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	check_valid_name(char *name, int *ret)
 	return (1);
 }
 
-void remove_from_exp(char *name)
+void	remove_from_exp(char *name)
 {
 	int		size;
 
@@ -99,7 +99,7 @@ int	ft_unset(char **name)
 	int		i;
 	char	*temp;
 	int		ret;
-	
+
 	i = 0;
 	ret = 0;
 	while (name[++i])

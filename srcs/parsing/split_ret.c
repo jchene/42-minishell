@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_ret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:43:15 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/12 20:43:45 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:58:59 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	detach_next(t_parsing *new, int i)
 	new->quotes = (data())->p_index->quotes;
 	new->flag = (data())->p_index->flag;
 	new->str = ft_strndup((data())->p_index->str,
-		ft_strlen((data())->p_index->str), i);
+			ft_strlen((data())->p_index->str), i);
 	if (!new->str)
 		return (ifree(new, 0));
 	return (1);
@@ -43,7 +43,7 @@ int	detach_next(t_parsing *new, int i)
 int	remove_behind(char *temp)
 {
 	if (!detach_next(NULL, (data())->i))
-			return (0);
+		return (0);
 	temp = ft_strndup((data())->p_index->str, (data())->i, 0);
 	if (!temp)
 		return (0);
@@ -74,7 +74,7 @@ int	split_ret(void)
 			(data())->i++;
 			if (!remove_behind(NULL))
 				return (0);
-		};
+		}
 	}
 	return (1);
 }

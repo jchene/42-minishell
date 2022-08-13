@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 22:45:44 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 00:08:10 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:04:43 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_builtin(char *str)
 {
+	if (!str || !str[0])
+		return (-1);
 	if (ft_strcmp(str, "cd"))
 		return (1);
 	if (ft_strcmp(str, "env"))
@@ -31,16 +33,42 @@ int	is_builtin(char *str)
 	return (0);
 }
 
-int	next_cmd_is_valid(t_parsing *start)
+void	*check_cmd(char *cmd, char *path, char **dirs, char *tmp)
 {
-	t_parsing	*temp;
+	int		i;
 
-	temp = start;
+	if (get_env_index("PATH", (data())->envp) != -1)
+		dirs = ft_split((data())->envp[get_env_index("PATH", (data())->envp)],
+				':');
+	else
+		return (NULL);
+	i = -1;
+	while (cmd && dirs[++i])
+	{
+		tmp = ft_strjoin(dirs[i], "/");
+		if (!tmp && !free_ptabn((void **)dirs))
+			return (NULL);
+		path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!path && !free_ptabn((void **)dirs))
+			return (pfree(path, NULL));
+		if (!access(path, X_OK) && !free_ptabn((void **)dirs))
+			return (pfree(path, (void *)1));
+		if (!access(path, F_OK) && !free_ptabn((void **)dirs) && ifree(path, 1))
+			return (pfree(path, NULL));
+		free(path);
+	}
+	free_ptabn((void **)dirs);
+	return (0);
+}
+
+int	next_cmd_is_valid(t_parsing *temp)
+{
 	if (!temp)
 		return (1);
 	if (temp->flag == PIP)
 		temp = temp->next;
-	while (temp && temp->flag != CMD)
+	while (temp && temp->flag == PIP && temp->flag != CMD)
 		temp = temp->next;
 	if (!temp)
 		return (1);
@@ -50,17 +78,18 @@ int	next_cmd_is_valid(t_parsing *start)
 	{
 		if (!access(temp->str, X_OK))
 			return (1);
-		if (!access(temp->str, F_OK))
-			return (0);
+		return (0);
 	}
 	if (is_builtin(temp->str))
+		return (1);
+	if (check_cmd(temp->str, NULL, NULL, NULL))
 		return (1);
 	return (0);
 }
 
 int	exec_builtin(t_exec *struc)
 {
-	if (next_cmd_is_valid((data())->p_index))
+	if (struc->path && struc->path[0] && next_cmd_is_valid((data())->p_index))
 	{
 		if (ft_strcmp(struc->path, "env"))
 			(data())->exit_code = ft_env(1);
@@ -99,7 +128,7 @@ void	apply_builtin(t_exec *struc, int ret, int is_last)
 			set_int(&(data())->exit_code, ret, 0);
 	}
 	else if (ret == 4)
-		ft_exit();
+		ft_exit(struc->args);
 	else if (ret == 5 && struc->args[1])
 	{
 		ret = ft_export(struc->args, 0);
