@@ -3,36 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:47 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 16:00:07 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 19:11:50 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/header.h"
 
+int	is_str_num(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (!ft_ischarset("0123456789", str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	ft_exit(char **args)
 {
-	int	exit_code;
+	int	e_c;
 
-	exit_code = 0;
-	if (args && args[1])
+	printf("exit\n");
+	if (set_int(&e_c, 0, 1) && args && args[1])
 	{
-		if (args && args[0] && args[1] && args[2])
+		if (!is_str_num(args[1]) && set_int(&e_c, 2, 1))
+			ft_putstr_fd("bash: exit: numeric argument required\n", 2);
+		else if (args && args[0] && args[1] && args[2]
+			&& set_int(&(data()->exit_code), 1, 1))
 		{
-			printf("bash: exit: too many arguments\n");
+			ft_putstr_fd("bash: exit: too many arguments\n", 2);
 			return ;
 		}
-		exit_code = ft_atoi(args[1]);
-		exit_code = exit_code % 256;
-		if (exit_code < 0)
+		if (is_str_num(args[1]) && set_int(&e_c, ft_atoi(args[1]), 1))
 		{
-			exit_code *= -1;
-			exit_code = 256 - exit_code;
+			e_c = e_c % 256;
+			if (e_c < 0)
+				e_c = 256 - (e_c * -1);
 		}
 	}
-	(data())->exit_code = exit_code;
+	(data())->exit_code = e_c;
 	if (ft_strcmp((data())->p_start->str, "exit"))
 		data()->stop = 1;
 }

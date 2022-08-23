@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:19:42 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:14:57 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:25:30 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	check_option(char **str, int *n, int *h)
 			while (str[*h][i] && str[*h][i] == 'n')
 				i++;
 			if (!str[*h][i] && str[*h][i - 1] == 'n')
-				*n++;
+				(*n)++;
 			else
 				break ;
 		}

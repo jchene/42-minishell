@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 23:56:48 by anguinau          #+#    #+#             */
-/*   Updated: 2022/06/15 03:19:21 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:36:29 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ long long	ft_atoi(const char *nptr)
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
 		nbr *= 10;
-		nbr += (int)*nptr - 48;
+		nbr += nptr[i] - 48;
 		i++;
 	}
 	return (nbr * neg);

@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 17:48:08 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:14:43 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:27:01 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*try_path(char *string, t_exec *struc, char **dirs, char *path)
 	return ((void *)1);
 }
 
-char	*check_cmd(char *string)
+char	*check_dat_cmd(char *string)
 {
 	if (is_directory(string))
 		return ((void *)display_error(ER_CMD_DI, string, CMD_NO_X) + 1);
@@ -91,8 +91,8 @@ char	*get_path(char *string, t_exec *struc, char **envp)
 	if (!path)
 		return (NULL);
 	set_path(path, struc);
-	if (check_cmd(string))
-		return (1);
+	if (check_dat_cmd(string))
+		return ((void *)1);
 	free(path);
 	set_path(NULL, struc);
 	if (get_env_index("PATH", envp) != -1)

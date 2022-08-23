@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_new_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anguinau <constantasg@gmail.com>           +#+  +:+       +#+        */
+/*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 00:11:09 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/11 13:37:09 by anguinau         ###   ########.fr       */
+/*   Updated: 2022/08/13 19:52:38 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ int	fill_that_line(int i)
 	(data())->line_index = (data())->line_start;
 	while ((data())->line_index && ++i)
 		(data())->line_index = (data())->line_index->next;
-	(data())->line = malloc(sizeof(char) * i);
+	(data())->line = malloc(sizeof(char) * i + 1);
 	if (!(data())->line)
 		return (free_that_line());
+	(data())->line[i] = '\0';
 	i = -1;
 	(data())->line_index = (data())->line_start;
 	while ((data())->line_index && ++i >= 0)

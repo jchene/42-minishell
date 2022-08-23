@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 22:45:44 by anguinau          #+#    #+#             */
-/*   Updated: 2022/08/13 18:20:04 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 18:25:45 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	exec_builtin(t_exec *struc)
 void	apply_builtin_norm(int *is_last)
 {
 	if (!(data())->p_index)
-		*is_last++;
+		(*is_last)++;
 }
 
 void	apply_builtin(t_exec *struc, int ret, int is_last)

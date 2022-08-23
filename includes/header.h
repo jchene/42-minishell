@@ -341,10 +341,7 @@ void			ft_strcpy(char *src, char *dst);
 int				ft_strmcpy(char *src, char **dst);
 int				strict_cmp(char *s1, char *s2);
 
-//				TEMP
-
-void			display_list(void);
-void			display_heredocs(void);
-const char		*flag_name(int flag);
+//				NORM HELPING - TMF
+int				new_quotes(int quote);
 
 #endif

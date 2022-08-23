@@ -6,7 +6,7 @@
 /*   By: jchene <jchene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 15:41:40 by jchene            #+#    #+#             */
-/*   Updated: 2022/08/13 18:10:32 by jchene           ###   ########.fr       */
+/*   Updated: 2022/08/13 19:05:13 by jchene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	launch_child(int i, char **envp)
 		return (1);
 	}
 	ret = is_builtin((data())->exec_struc->path);
-	if (ret == 1)
+	if (ret > 0)
 		apply_builtin((data())->exec_struc, ret, 0);
 	(data())->child_ids[i] = fork();
 	if ((data())->child_ids[i] < 0)
